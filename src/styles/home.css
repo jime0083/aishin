@@ -607,10 +607,12 @@
 .entry__title {
   font-family: var(--font-en);
   font-weight: 800;
-  font-size: clamp(4rem, 17vw, 12.5rem);
+  /* 画面幅に関わらず1行で収まるサイズ（改行禁止） */
+  font-size: clamp(3.2rem, 15vw, 11rem);
   line-height: 1;
   letter-spacing: 0.02em;
   margin-block: 1rem 1.5rem;
+  white-space: nowrap;
 }
 
 .entry__char {

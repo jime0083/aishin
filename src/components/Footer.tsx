@@ -12,7 +12,8 @@ const FOOTER_LINKS = [
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="footer__inner">
+      {/* 他セクションと同じ .container グリッドに揃える */}
+      <div className="container">
         <div className="footer__top">
           <div>
             <Link to="/" className="footer__logo">
