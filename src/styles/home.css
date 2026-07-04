@@ -1,0 +1,630 @@
+/* ============================================
+   Hero（ファーストビュー）
+============================================ */
+.hero {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+}
+
+/* マーキー帯を除いたメイン領域（物理演算・タイトル・WebGL背景） */
+.hero__main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  /* WebGL非対応環境用フォールバック背景 */
+  background-image: radial-gradient(circle, #e7ddca 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+
+/* WebGL液体歪みキャンバス */
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 物理演算ステージ */
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+}
+
+.hero__stage:active {
+  cursor: grabbing;
+}
+
+.hero__pieces {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-200vw, -200vh);
+  padding: 0.9em 1.5em;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+  letter-spacing: 0.08em;
+  border-radius: 26px;
+  white-space: nowrap;
+  will-change: transform;
+  user-select: none;
+  box-shadow: 0 10px 24px rgba(38, 34, 29, 0.1);
+}
+
+.hero__piece--solid {
+  background: var(--orange);
+  color: #fff;
+}
+
+.hero__piece--outline {
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+
+.hero__piece--yellow {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.hero__piece--white {
+  background: #fff;
+  color: var(--orange);
+  border: 1px solid var(--line);
+}
+
+.hero__piece--piece {
+  background: var(--blue);
+  color: #fff;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  padding: 0.7em 1.1em;
+}
+
+/* 動きを減らす設定時は静的に並べる */
+.hero__pieces--static {
+  position: absolute;
+  inset: auto 0 8% 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  padding-inline: 2rem;
+}
+
+.hero__pieces--static .hero__piece {
+  position: static;
+  transform: none;
+}
+
+/* タイトルまわり（縦書き） */
+.hero__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--header-h);
+  pointer-events: none;
+}
+
+/* 縦書きコンテナ: 右から リード → タイトル2列 → サブ の順に並ぶ */
+.hero__vertical {
+  writing-mode: vertical-rl;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  max-height: 100%;
+}
+
+.hero__lead {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+  letter-spacing: 0.34em;
+  color: var(--ink-soft);
+  padding-top: 0.4em;
+  opacity: 0;
+}
+
+.hero__title {
+  display: flex;
+  gap: clamp(0.4rem, 1.6vw, 1.2rem);
+  font-weight: 900;
+  font-size: clamp(2.4rem, min(8.5svh, 10vw), 5.2rem);
+  line-height: 1.26;
+  letter-spacing: 0.1em;
+}
+
+.hero__line {
+  display: block;
+}
+
+.hero__char {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.hero__char--accent {
+  color: var(--orange);
+}
+
+.hero__sub {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.18em;
+  padding-top: 0.4em;
+  opacity: 0;
+}
+
+.hero__sub-dot {
+  color: var(--orange);
+}
+
+/* スクロールキュー */
+.hero__scroll-cue {
+  position: absolute;
+  left: clamp(1.25rem, 4vw, 2.5rem);
+  bottom: 2rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  writing-mode: vertical-rl;
+  color: var(--ink-soft);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero__scroll-line {
+  width: 2px;
+  height: 56px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--orange);
+  animation: scroll-line 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-line {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  55%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ============================================
+   Mission
+============================================ */
+.mission__statement {
+  font-weight: 900;
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.mission__line {
+  display: block;
+  overflow: hidden;
+}
+
+.mission__line-inner {
+  display: block;
+  will-change: transform;
+}
+
+.mission__line:nth-child(2) .mission__line-inner {
+  color: var(--orange);
+}
+
+/* 本文の左端は見出しと同じcontainer左ラインに揃える（グリッド整列ルール） */
+.mission__body {
+  max-width: 680px;
+  display: grid;
+  gap: 1.2rem;
+  color: var(--ink);
+}
+
+/* ============================================
+   About
+============================================ */
+.about__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+  margin-bottom: clamp(4rem, 8vw, 6rem);
+}
+
+.about__text .section__title {
+  margin-bottom: 1.4rem;
+}
+
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem 1.5rem;
+  margin-top: 2.8rem;
+}
+
+.about__stat {
+  border-top: 2px solid var(--ink);
+  padding-top: 0.9rem;
+}
+
+.about__stat-value {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1;
+  color: var(--orange);
+}
+
+.about__stat-suffix {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--orange);
+  margin-left: 0.15em;
+}
+
+.about__stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+.about__images {
+  position: relative;
+  padding-bottom: 18%;
+}
+
+.about__img-sub {
+  position: absolute;
+  width: 46%;
+  right: -4%;
+  bottom: 0;
+  border: 6px solid var(--paper);
+  box-shadow: 0 18px 40px rgba(38, 34, 29, 0.12);
+}
+
+.about__profile {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: clamp(1.8rem, 4vw, 3rem);
+}
+
+.about__profile-title {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  margin-bottom: 1.4rem;
+}
+
+.about__profile-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.about__profile-row dt {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* ============================================
+   Service
+============================================ */
+.service__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+}
+
+.service__card {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.service__card:hover {
+  transform: translateY(-8px) rotate(-0.5deg);
+  box-shadow: 0 24px 48px rgba(38, 34, 29, 0.14);
+}
+
+.service__card .img-ph {
+  border-radius: 0;
+  border-inline: none;
+  border-top: none;
+}
+
+.service__card-body {
+  padding: 1.6rem 1.6rem 1.8rem;
+}
+
+.service__card-num {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--orange);
+  letter-spacing: 0.1em;
+}
+
+.service__card-title {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-top: 0.4rem;
+}
+
+.service__card-jp {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-top: 0.2rem;
+}
+
+.service__card-desc {
+  font-size: 0.88rem;
+  margin-top: 0.9rem;
+  color: var(--ink);
+}
+
+/* ============================================
+   Works
+============================================ */
+.works__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+}
+
+.works__card {
+  display: block;
+}
+
+.works__card .img-ph {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.works__card:hover .img-ph {
+  transform: scale(1.03) rotate(0.6deg);
+}
+
+.works__tag {
+  display: inline-block;
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+  border-radius: 999px;
+  padding: 0.25em 1em;
+  margin-top: 1.1rem;
+}
+
+.works__title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.7;
+  margin-top: 0.6rem;
+}
+
+/* ============================================
+   Interview
+============================================ */
+.interview__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+}
+
+.interview__card {
+  display: block;
+}
+
+.interview__card .img-ph {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.interview__card:hover .img-ph {
+  transform: translateY(-6px);
+}
+
+.interview__quote {
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  margin-top: 1.2rem;
+}
+
+.interview__name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 0.8rem;
+}
+
+.interview__role {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+/* ============================================
+   Career
+============================================ */
+.career__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.career__lead {
+  margin-block: 1.2rem 2rem;
+}
+
+.career__list {
+  display: grid;
+  gap: 1.4rem;
+  margin-bottom: 2.4rem;
+}
+
+.career__item {
+  border-left: 3px solid var(--orange);
+  padding-left: 1.2rem;
+}
+
+.career__item h3 {
+  font-size: 1.02rem;
+  font-weight: 900;
+}
+
+.career__item p {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+/* ============================================
+   Entry CTA
+============================================ */
+.entry {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: #fff;
+  padding-block: clamp(6rem, 12vw, 10rem);
+  text-align: center;
+}
+
+.entry__bg {
+  position: absolute;
+  inset: clamp(0.8rem, 2vw, 1.5rem);
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+
+.entry__bg-note {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 0.9rem;
+  font-family: var(--font-en);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.entry__inner {
+  position: relative;
+}
+
+.entry__eyebrow {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.34em;
+}
+
+.entry__title {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(4rem, 17vw, 12.5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-block: 1rem 1.5rem;
+}
+
+.entry__char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.entry__copy {
+  font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  font-weight: 700;
+  line-height: 2.1;
+}
+
+.entry__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-top: 2.5rem;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  letter-spacing: 0.12em;
+  padding: 1.1em 2.8em;
+  border-radius: 999px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.entry__btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.24);
+}
+
+/* ============================================
+   Responsive
+============================================ */
+@media (max-width: 900px) {
+  .about__grid,
+  .career__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service__cards,
+  .works__cards,
+  .interview__cards {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  .about__profile-row {
+    grid-template-columns: 110px 1fr;
+  }
+
+}
