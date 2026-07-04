@@ -75,6 +75,17 @@ problem.txt の P-005〜P-007 に対応するタスク一覧。
 - GitHub連携: main プッシュ＋ gh-pages デプロイ＋ Pages 有効化
 - 本番URL: https://jime0083.github.io/aishin/
 
+### Phase 4: ユーザーレビュー第2回対応 ✅（詳細は problem.txt P-005〜P-007）
+- FVタイトルを横書きに復帰（キネティック出現は維持し、出現後にゆっくり浮遊し続けるループを追加）
+- ページ全体の背景アニメーション FloatingBg を実装（グロー円・リング・ピース片・十字の11シェイプが常時浮遊＋スクロールで速度差のある視差移動・ループ）
+- 各セクション背景に巨大アウトライン英字（MISSION/ABOUT/SERVICE/WORKS/PEOPLE/GROWTH）を配置し、スクロールで左右に流れる演出を追加
+- スクロール速度に連動して見出し・カード群が歪む skew 演出を追加
+- セクション見出しをマスクリビール（clip-path）で出現させる演出に変更
+- カード群の出現アニメーションに回転・スケールを追加して立体感を強化
+- Heroに回転する円形テキストバッジ（JOIN OUR TEAM → /entry リンク）を追加
+- ENTRY前に逆方向へ流れる斜めマーキー帯を追加
+- 型チェック・ビルド通過、GitHub Pagesへデプロイ済み（https://jime0083.github.io/aishin/ の200応答を確認）
+
 ### 未着手（ユーザー指示待ち）
 - 下層ページ: /service /works /interview /career /entry（現在は Coming Soon 表示）
 - 画像素材の差し込み（ユーザーが img.txt を基に用意予定）
