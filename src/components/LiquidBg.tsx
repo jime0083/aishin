@@ -8,6 +8,15 @@ import { useEffect, useRef } from 'react';
  */
 
 const TRAIL_COUNT = 16;
+const TEXT_ROWS = 4;
+
+/** 背景を流れる巨大タイポ（行ごとに交互方向・速度違い） */
+const ROW_PHRASES = [
+  { text: 'INVENT THE MISSING PIECE — ', color: 'rgba(255, 90, 31, 0.22)', speed: 0.016 },
+  { text: 'AISHIN INC. — CONSULTING VENTURE — ', color: 'rgba(38, 34, 29, 0.13)', speed: -0.022 },
+  { text: 'STRATEGY × CREATIVE × LOGIC — ', color: 'rgba(255, 90, 31, 0.18)', speed: 0.012 },
+  { text: 'JOIN OUR TEAM — EST. 2018 — ', color: 'rgba(38, 34, 29, 0.11)', speed: -0.018 },
+];
 
 const VERT = `
 attribute vec2 aPos;
@@ -21,10 +30,14 @@ void main() {
 const FRAG = `
 precision highp float;
 uniform sampler2D uTex;
+uniform sampler2D uTextTex;
 uniform vec2 uRes;
 uniform float uTime;
 uniform float uScrollX;
 uniform vec3 uTrail[${TRAIL_COUNT}];
+uniform float uRowRepeat[${TEXT_ROWS}];
+uniform float uRowSpeed[${TEXT_ROWS}];
+uniform float uRowFrac[${TEXT_ROWS}];
 varying vec2 vUv;
 
 void main() {
@@ -51,7 +64,28 @@ void main() {
   }
 
   vec2 suv = uv + offset + vec2(uScrollX / uRes.x, 0.0);
-  gl_FragColor = texture2D(uTex, suv);
+  vec4 base = texture2D(uTex, suv);
+
+  // 多層キネティックタイポ: 行ごとに逆方向へ流れ、歪みの影響も受ける
+  vec2 tuvBase = uv + offset;
+  float rowF = clamp(tuvBase.y, 0.0, 0.999) * ${TEXT_ROWS}.0;
+  int row = int(floor(rowF));
+  // GLSL ES 1.0では動的インデックスが使えない環境があるため定数ループで選択
+  float repeat = 0.0;
+  float speed = 0.0;
+  float frac = 1.0;
+  for (int i = 0; i < ${TEXT_ROWS}; i++) {
+    if (i == row) {
+      repeat = uRowRepeat[i];
+      speed = uRowSpeed[i];
+      frac = uRowFrac[i];
+    }
+  }
+  float tx = fract(tuvBase.x * repeat + uTime * speed + uScrollX / uRes.x);
+  vec2 tuv = vec2(tx * frac, rowF / ${TEXT_ROWS}.0);
+  vec4 typo = texture2D(uTextTex, tuv);
+
+  gl_FragColor = vec4(mix(base.rgb, typo.rgb, typo.a), 1.0);
 }
 `;
 
@@ -78,12 +112,38 @@ function drawTexture(ctx: CanvasRenderingContext2D, w: number, h: number, dpr: n
     }
   }
 
-  // 巨大アウトラインタイポ
-  ctx.font = `800 ${Math.min(w * 0.3, h * 0.62)}px Syne, sans-serif`;
+}
+
+/**
+ * 多層キネティックタイポのアトラス（1行=1フレーズ、横タイル可能）。
+ * 各行の1タイル分の実幅を返す（シェーダーのリピート計算に使用）。
+ */
+function drawTextAtlas(ctx: CanvasRenderingContext2D, w: number, rowH: number): number[] {
+  ctx.clearRect(0, 0, w, rowH * TEXT_ROWS);
   ctx.textBaseline = 'middle';
-  ctx.lineWidth = 2 * dpr;
-  ctx.strokeStyle = 'rgba(255, 90, 31, 0.18)';
-  ctx.strokeText('INVENT', -w * 0.01, h * 0.24);
+  return ROW_PHRASES.map((row, i) => {
+    let fontSize = rowH * 0.74;
+    ctx.font = `800 ${fontSize}px Syne, sans-serif`;
+    let tileW = ctx.measureText(row.text).width;
+    // アトラス幅に収まらないフレーズはフォントを縮小してタイル化を保つ
+    if (tileW > w) {
+      fontSize *= (w / tileW) * 0.98;
+      ctx.font = `800 ${fontSize}px Syne, sans-serif`;
+      tileW = ctx.measureText(row.text).width;
+    }
+    const y = rowH * i + rowH / 2;
+    ctx.strokeStyle = row.color;
+    ctx.lineWidth = Math.max(2, fontSize * 0.016);
+    // タイル境界をまたいでも途切れないよう2周分描く
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, rowH * i, w, rowH);
+    ctx.clip();
+    ctx.strokeText(row.text, 0, y);
+    ctx.strokeText(row.text, tileW, y);
+    ctx.restore();
+    return tileW;
+  });
 }
 
 export default function LiquidBg() {
@@ -131,27 +191,69 @@ export default function LiquidBg() {
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    // --- テクスチャ（2Dキャンバスに描画） ---
+    // --- テクスチャ（2Dキャンバスに描画）: 0=ベース背景 / 1=タイポアトラス ---
     const texCanvas = document.createElement('canvas');
     const texCtx = texCanvas.getContext('2d');
-    if (!texCtx) return;
-    const texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    const atlasCanvas = document.createElement('canvas');
+    const atlasCtx = atlasCanvas.getContext('2d');
+    if (!texCtx || !atlasCtx) return;
+
+    const createTexture = () => {
+      const texture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      return texture;
+    };
+    const baseTexture = createTexture();
+    const atlasTexture = createTexture();
+
+    const maxTexSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
+    const atlasW = Math.min(4096, maxTexSize);
+    const atlasRowH = 256;
+    atlasCanvas.width = atlasW;
+    atlasCanvas.height = atlasRowH * TEXT_ROWS;
 
     const uTex = gl.getUniformLocation(program, 'uTex');
+    const uTextTex = gl.getUniformLocation(program, 'uTextTex');
     const uRes = gl.getUniformLocation(program, 'uRes');
     const uTime = gl.getUniformLocation(program, 'uTime');
     const uScrollX = gl.getUniformLocation(program, 'uScrollX');
     const uTrail = gl.getUniformLocation(program, 'uTrail');
+    const uRowRepeat = gl.getUniformLocation(program, 'uRowRepeat');
+    const uRowSpeed = gl.getUniformLocation(program, 'uRowSpeed');
+    const uRowFrac = gl.getUniformLocation(program, 'uRowFrac');
     gl.uniform1i(uTex, 0);
+    gl.uniform1i(uTextTex, 1);
+    gl.uniform1fv(uRowSpeed, ROW_PHRASES.map((r) => r.speed));
 
-    const uploadTexture = () => {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
+    const uploadBase = () => {
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, baseTexture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texCanvas);
+    };
+
+    let tileWidths: number[] = ROW_PHRASES.map(() => atlasW);
+
+    // アトラス再描画＋行ごとのリピート数・タイル幅比を更新
+    const updateAtlas = () => {
+      tileWidths = drawTextAtlas(atlasCtx, atlasW, atlasRowH);
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, atlasTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlasCanvas);
+      gl.uniform1fv(uRowFrac, tileWidths.map((tw) => tw / atlasW));
+      updateRepeats();
+    };
+
+    // 画面上の行高に合わせたタイルの繰り返し数（グリフの縦横比を保つ）
+    const updateRepeats = () => {
+      const w = canvas.width;
+      const h = canvas.height;
+      if (w === 0 || h === 0) return;
+      const scale = h / TEXT_ROWS / atlasRowH;
+      gl.uniform1fv(uRowRepeat, tileWidths.map((tw) => w / Math.max(1, tw * scale)));
     };
 
     const resize = () => {
@@ -165,14 +267,17 @@ export default function LiquidBg() {
       gl.viewport(0, 0, w, h);
       gl.uniform2f(uRes, w, h);
       drawTexture(texCtx, w, h, dpr);
-      uploadTexture();
+      uploadBase();
+      updateRepeats();
     };
+    updateAtlas();
     resize();
 
     // Webフォント読み込み後にタイポを描き直す
     document.fonts.ready.then(() => {
       drawTexture(texCtx, texCanvas.width, texCanvas.height, dpr);
-      uploadTexture();
+      uploadBase();
+      updateAtlas();
     });
 
     // --- カーソル軌跡 ---
