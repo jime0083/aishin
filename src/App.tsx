@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
+import FloatingBg from './components/FloatingBg';
 import Home from './pages/Home';
 import ComingSoon from './pages/ComingSoon';
 
@@ -19,6 +20,7 @@ export default function App() {
     <HashRouter>
       <ScrollToTop />
       <CustomCursor />
+      <FloatingBg />
       <Header />
       <main>
         <Routes>

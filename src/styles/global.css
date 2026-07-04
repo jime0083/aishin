@@ -85,12 +85,27 @@ button {
   padding-inline: clamp(1.25rem, 5vw, 3rem);
 }
 
+/* 浮遊背景を透かすため、コンテンツは背景レイヤーより上に置く */
+main,
+.header,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
 .section {
+  position: relative;
+  overflow: hidden;
   padding-block: clamp(5rem, 10vw, 8.5rem);
 }
 
+.section > .container {
+  position: relative;
+  z-index: 1;
+}
+
 .section--tinted {
-  background: var(--paper-2);
+  background: rgba(243, 236, 225, 0.72);
 }
 
 .section__eyebrow {
@@ -408,6 +423,166 @@ button {
 }
 
 /* ============================================
+   Floating Background（ページ全体の浮遊シェイプ）
+============================================ */
+.floating-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-bg__item {
+  position: absolute;
+  will-change: transform;
+}
+
+.floating-bg__shape {
+  display: block;
+  will-change: transform;
+}
+
+.floating-bg__shape--glow {
+  width: clamp(240px, 34vw, 460px);
+  height: clamp(240px, 34vw, 460px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 138, 92, 0.22) 0%, rgba(255, 138, 92, 0) 68%);
+}
+
+.floating-bg__shape--glow2 {
+  width: clamp(220px, 30vw, 420px);
+  height: clamp(220px, 30vw, 420px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 194, 41, 0.2) 0%, rgba(255, 194, 41, 0) 68%);
+}
+
+.floating-bg__shape--ring {
+  width: clamp(70px, 9vw, 130px);
+  height: clamp(70px, 9vw, 130px);
+  border: 2px solid rgba(255, 90, 31, 0.28);
+  border-radius: 50%;
+}
+
+.floating-bg__shape--ring-dash {
+  width: clamp(90px, 11vw, 160px);
+  height: clamp(90px, 11vw, 160px);
+  border: 2px dashed rgba(38, 34, 29, 0.18);
+  border-radius: 50%;
+}
+
+.floating-bg__shape--square {
+  width: clamp(20px, 2.6vw, 34px);
+  height: clamp(20px, 2.6vw, 34px);
+  background: rgba(255, 90, 31, 0.3);
+  border-radius: 26%;
+  transform: rotate(18deg);
+}
+
+.floating-bg__shape--square2 {
+  width: clamp(16px, 2.2vw, 28px);
+  height: clamp(16px, 2.2vw, 28px);
+  background: rgba(43, 73, 224, 0.22);
+  border-radius: 26%;
+  transform: rotate(-12deg);
+}
+
+.floating-bg__shape--plus {
+  position: relative;
+  width: clamp(22px, 2.8vw, 36px);
+  height: clamp(22px, 2.8vw, 36px);
+}
+
+.floating-bg__shape--plus::before,
+.floating-bg__shape--plus::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 90, 31, 0.32);
+  border-radius: 3px;
+}
+
+.floating-bg__shape--plus::before {
+  inset: 42% 0;
+}
+
+.floating-bg__shape--plus::after {
+  inset: 0 42%;
+}
+
+/* 常時の浮遊アニメーション（3パターン） */
+.f-float-1 {
+  animation: f-float-1 9s ease-in-out infinite;
+}
+
+.f-float-2 {
+  animation: f-float-2 12s ease-in-out infinite;
+}
+
+.f-float-3 {
+  animation: f-float-3 15s ease-in-out infinite;
+}
+
+@keyframes f-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(24px, -30px) rotate(14deg);
+  }
+}
+
+@keyframes f-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(-30px, 24px) rotate(-18deg);
+  }
+}
+
+@keyframes f-float-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(18px, 34px) scale(1.08);
+  }
+}
+
+/* ============================================
+   Giant Word（セクション背景の巨大アウトライン英字）
+============================================ */
+.giant-word {
+  position: absolute;
+  top: 0.4rem;
+  z-index: 0;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(5rem, 17vw, 15rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 90, 31, 0.16);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.giant-word--right {
+  right: -2%;
+}
+
+.giant-word--left {
+  left: -2%;
+}
+
+/* ============================================
    Marquee（無限ループ帯・FV下端）
 ============================================ */
 .marquee {
@@ -416,6 +591,15 @@ button {
   z-index: 5;
   overflow: hidden;
   flex: none;
+}
+
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+
+.marquee--tilt {
+  transform: rotate(-1.6deg) scale(1.03);
+  margin-block: clamp(1rem, 3vw, 2rem) -1rem;
 }
 
 .marquee__track {
@@ -441,7 +625,12 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee__track {
+  .marquee__track,
+  .f-float-1,
+  .f-float-2,
+  .f-float-3,
+  .hero__badge-svg,
+  .hero__scroll-line::after {
     animation: none;
   }
 

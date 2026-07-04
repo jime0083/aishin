@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import GiantWord from '../components/GiantWord';
 
 const MEMBERS = [
   {
@@ -28,6 +29,7 @@ const MEMBERS = [
 export default function InterviewTeaser() {
   return (
     <section className="interview section section--tinted" id="interview">
+      <GiantWord text="PEOPLE" side="right" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
           <span className="section__eyebrow-num">05</span> INTERVIEW

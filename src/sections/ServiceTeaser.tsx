@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import GiantWord from '../components/GiantWord';
 
 const SERVICES = [
   {
@@ -31,6 +32,7 @@ const SERVICES = [
 export default function ServiceTeaser() {
   return (
     <section className="service section section--tinted" id="service">
+      <GiantWord text="SERVICE" side="right" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
           <span className="section__eyebrow-num">03</span> SERVICE

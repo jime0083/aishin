@@ -1,4 +1,5 @@
 import ImagePlaceholder from '../components/ImagePlaceholder';
+import GiantWord from '../components/GiantWord';
 
 const STATS = [
   { value: 2018, label: '設立', suffix: '', decimals: 0 },
@@ -19,6 +20,7 @@ const PROFILE: [string, string][] = [
 export default function About() {
   return (
     <section className="about section" id="about">
+      <GiantWord text="ABOUT" side="left" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
           <span className="section__eyebrow-num">02</span> ABOUT US

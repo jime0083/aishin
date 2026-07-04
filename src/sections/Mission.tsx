@@ -1,8 +1,11 @@
+import GiantWord from '../components/GiantWord';
+
 const STATEMENT_LINES = ['世界は、まだ未完成。', 'ピースは、発明するもの。'];
 
 export default function Mission() {
   return (
     <section className="mission section" id="mission">
+      <GiantWord text="MISSION" side="right" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
           <span className="section__eyebrow-num">01</span> MISSION

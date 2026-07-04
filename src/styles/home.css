@@ -105,48 +105,41 @@
   transform: none;
 }
 
-/* タイトルまわり（縦書き） */
+/* タイトルまわり（横書き・中央） */
 .hero__content {
   position: absolute;
   inset: 0;
   z-index: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: var(--header-h);
+  text-align: center;
+  padding: var(--header-h) 1.5rem 6vh;
   pointer-events: none;
-}
-
-/* 縦書きコンテナ: 右から リード → タイトル2列 → サブ の順に並ぶ */
-.hero__vertical {
-  writing-mode: vertical-rl;
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(1rem, 3vw, 2.4rem);
-  max-height: 100%;
 }
 
 .hero__lead {
   font-family: var(--font-en);
   font-weight: 700;
-  font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
   letter-spacing: 0.34em;
   color: var(--ink-soft);
-  padding-top: 0.4em;
+  margin-bottom: 1.8rem;
   opacity: 0;
 }
 
 .hero__title {
-  display: flex;
-  gap: clamp(0.4rem, 1.6vw, 1.2rem);
   font-weight: 900;
-  font-size: clamp(2.4rem, min(8.5svh, 10vw), 5.2rem);
-  line-height: 1.26;
-  letter-spacing: 0.1em;
+  font-size: clamp(2.4rem, 8vw, 5.6rem);
+  line-height: 1.28;
+  letter-spacing: 0.02em;
 }
 
 .hero__line {
   display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
 }
 
 .hero__char {
@@ -162,14 +155,61 @@
 .hero__sub {
   font-family: var(--font-en);
   font-weight: 700;
-  font-size: clamp(0.8rem, 1.6vw, 1.05rem);
-  letter-spacing: 0.18em;
-  padding-top: 0.4em;
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  letter-spacing: 0.16em;
+  margin-top: 1.6rem;
   opacity: 0;
 }
 
 .hero__sub-dot {
   color: var(--orange);
+}
+
+/* 回転する円形テキストバッジ */
+.hero__badge {
+  position: absolute;
+  right: clamp(1.25rem, 4vw, 3rem);
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  z-index: 3;
+  width: clamp(88px, 11vw, 128px);
+  height: clamp(88px, 11vw, 128px);
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  border-radius: 50%;
+  opacity: 0;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero__badge:hover {
+  background: var(--orange);
+  transform: scale(1.06);
+}
+
+.hero__badge-svg {
+  position: absolute;
+  inset: 8%;
+  animation: badge-spin 14s linear infinite;
+}
+
+.hero__badge-text {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.18em;
+  fill: #fff;
+}
+
+.hero__badge-arrow {
+  color: #fff;
+  font-size: 1.4rem;
+  transform: rotate(45deg);
+}
+
+@keyframes badge-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* スクロールキュー */

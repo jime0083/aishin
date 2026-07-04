@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Hero from '../sections/Hero';
 import Loader from '../components/Loader';
+import Marquee from '../components/Marquee';
 import Mission from '../sections/Mission';
 import About from '../sections/About';
 import ServiceTeaser from '../sections/ServiceTeaser';
@@ -39,20 +40,84 @@ export default function Home() {
         );
       });
 
-      // グループ（子要素をずらして表示）
+      // グループ（子要素を回転・スケール付きでずらして表示）
       gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
         gsap.fromTo(
           Array.from(group.children),
-          { opacity: 0, y: 56 },
+          {
+            opacity: 0,
+            y: 72,
+            scale: 0.94,
+            rotate: () => gsap.utils.random(-4, 4),
+          },
           {
             opacity: 1,
             y: 0,
-            duration: 0.8,
+            scale: 1,
+            rotate: 0,
+            duration: 0.9,
             ease: 'power3.out',
-            stagger: 0.12,
+            stagger: 0.13,
             scrollTrigger: { trigger: group, start: 'top 82%' },
           },
         );
+      });
+
+      // セクション見出しのマスクリビール
+      gsap.utils.toArray<HTMLElement>('.section__title').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { clipPath: 'inset(0 0 100% 0)', y: 36 },
+          {
+            clipPath: 'inset(0 0 -20% 0)',
+            y: 0,
+            duration: 1,
+            ease: 'power4.out',
+            scrollTrigger: { trigger: el, start: 'top 86%' },
+          },
+        );
+      });
+
+      // 巨大アウトライン英字をスクロールで横に流す
+      gsap.utils.toArray<HTMLElement>('[data-giant]').forEach((el) => {
+        const dir = el.dataset.giant === 'left' ? 1 : -1;
+        gsap.fromTo(
+          el,
+          { xPercent: 6 * dir },
+          {
+            xPercent: -10 * dir,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el.parentElement ?? el,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.6,
+            },
+          },
+        );
+      });
+
+      // スクロール速度に連動したskew（歪み）演出
+      const skewTargets = gsap.utils.toArray<HTMLElement>(
+        '.mission__statement, .service__cards, .works__cards, .interview__cards, .career__list',
+      );
+      const skewSetters = skewTargets.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
+      const skewProxy = { value: 0 };
+      const applySkew = () => skewSetters.forEach((set) => set(skewProxy.value));
+      ScrollTrigger.create({
+        onUpdate: (self) => {
+          const velocity = gsap.utils.clamp(-6, 6, self.getVelocity() / -400);
+          if (Math.abs(velocity) > Math.abs(skewProxy.value)) {
+            skewProxy.value = velocity;
+            gsap.to(skewProxy, {
+              value: 0,
+              duration: 0.8,
+              ease: 'power3.out',
+              overwrite: true,
+              onUpdate: applySkew,
+            });
+          }
+        },
       });
 
       // ミッションの行ごとのマスクリビール（キネティック文字）
@@ -127,6 +192,7 @@ export default function Home() {
       <WorksTeaser />
       <InterviewTeaser />
       <CareerTeaser />
+      <Marquee text="JOIN US — INVENT YOUR OWN PIECE — " reverse tilt />
       <EntryCta />
     </div>
   );

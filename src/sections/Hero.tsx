@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import Matter from 'matter-js';
 import gsap from 'gsap';
 import LiquidBg from '../components/LiquidBg';
@@ -36,15 +37,18 @@ export default function Hero({ start }: Props) {
   const piecesRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // キネティックタイポグラフィ（縦書きタイトルのドロップイン）
+  // キネティックタイポグラフィ（横書きタイトルのドロップイン→浮遊ループ）
   useEffect(() => {
     if (!contentRef.current || !start) return;
     const reduced = prefersReducedMotion();
     const ctx = gsap.context(() => {
       const chars = gsap.utils.toArray<HTMLElement>('.hero__char');
       if (reduced) {
-        gsap.set(chars, { opacity: 1, y: 0, rotate: 0 });
-        gsap.set(['.hero__sub', '.hero__lead', '.hero__scroll-cue'], { opacity: 1, x: 0 });
+        gsap.set(chars, { opacity: 1, yPercent: 0, rotate: 0 });
+        gsap.set(['.hero__sub', '.hero__lead', '.hero__scroll-cue', '.hero__badge'], {
+          opacity: 1,
+          y: 0,
+        });
         return;
       }
       const tl = gsap.timeline({ defaults: { ease: 'back.out(1.8)' } });
@@ -52,36 +56,50 @@ export default function Hero({ start }: Props) {
         chars,
         {
           opacity: 0,
-          y: () => gsap.utils.random(-90, -50),
-          rotate: () => gsap.utils.random(-28, 28),
+          yPercent: 130,
+          rotate: () => gsap.utils.random(-26, 26),
         },
         {
           opacity: 1,
-          y: 0,
+          yPercent: 0,
           rotate: 0,
-          duration: 0.85,
-          stagger: 0.06,
+          duration: 0.9,
+          stagger: 0.055,
         },
         0.1,
       )
         .fromTo(
           '.hero__lead',
-          { opacity: 0, x: 24 },
-          { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
           '-=0.5',
         )
         .fromTo(
           '.hero__sub',
-          { opacity: 0, x: -24 },
-          { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
           '-=0.55',
+        )
+        .fromTo(
+          '.hero__badge',
+          { opacity: 0, scale: 0.5, rotate: -90 },
+          { opacity: 1, scale: 1, rotate: 0, duration: 0.8 },
+          '-=0.5',
         )
         .fromTo(
           '.hero__scroll-cue',
           { opacity: 0 },
           { opacity: 1, duration: 0.6, ease: 'none' },
-          '-=0.2',
-        );
+          '-=0.4',
+        )
+        // 出現後もタイトルがゆっくり浮遊し続ける
+        .to('.hero__title', {
+          y: -10,
+          duration: 2.6,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+        });
     }, contentRef);
     return () => ctx.revert();
   }, [start]);
@@ -223,27 +241,43 @@ export default function Hero({ start }: Props) {
         </div>
 
         <div className="hero__content" ref={contentRef}>
-          <div className="hero__vertical">
-            <p className="hero__lead">CONSULTING VENTURE</p>
-            <h1 className="hero__title">
-              {TITLE_LINES.map((line) => (
-                <span key={line} className="hero__line">
-                  {Array.from(line).map((ch, i) => (
-                    <span
-                      key={`${ch}-${i}`}
-                      className={`hero__char ${ACCENT_CHARS.has(ch) ? 'hero__char--accent' : ''}`}
-                    >
-                      {ch}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </h1>
-            <p className="hero__sub">
-              Inventing the Missing Piece<span className="hero__sub-dot">.</span> — AISHIN Inc.
-            </p>
-          </div>
+          <p className="hero__lead">CONSULTING VENTURE — AISHIN Inc.</p>
+          <h1 className="hero__title">
+            {TITLE_LINES.map((line) => (
+              <span key={line} className="hero__line">
+                {Array.from(line).map((ch, i) => (
+                  <span
+                    key={`${ch}-${i}`}
+                    className={`hero__char ${ACCENT_CHARS.has(ch) ? 'hero__char--accent' : ''}`}
+                  >
+                    {ch}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </h1>
+          <p className="hero__sub">
+            Inventing the Missing Piece<span className="hero__sub-dot">.</span>
+          </p>
         </div>
+
+        {/* 回転する円形テキストバッジ（ENTRYへのショートカット） */}
+        <Link to="/entry" className="hero__badge" aria-label="採用エントリーへ">
+          <svg viewBox="0 0 120 120" className="hero__badge-svg">
+            <defs>
+              <path
+                id="badge-circle"
+                d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"
+              />
+            </defs>
+            <text className="hero__badge-text">
+              <textPath href="#badge-circle">JOIN OUR TEAM ・ AISHIN INC. ・ ENTRY ・</textPath>
+            </text>
+          </svg>
+          <span className="hero__badge-arrow" aria-hidden="true">
+            →
+          </span>
+        </Link>
 
         <div className="hero__scroll-cue" aria-hidden="true">
           <span className="hero__scroll-line" />
