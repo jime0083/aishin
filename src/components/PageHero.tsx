@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import GiantWord from './GiantWord';
+import WordPiece from './WordPiece';
 import usePhysicsPieces from '../hooks/usePhysicsPieces';
 
 type Props = {
   /** 英語見出し（キネティック出現） */
   title: string;
-  /** 日本語サブタイトル */
-  titleJa: string;
+  /** 日本語サブタイトル（任意） */
+  titleJa?: string;
   /** 導入文（任意） */
   lead?: string;
   /** 物理演算で降らせる言葉のピース（任意） */
@@ -23,7 +24,7 @@ function prefersReducedMotion(): boolean {
 /**
  * 下層ページ共通ヒーロー。
  * 英語見出しの1文字ずつのドロップイン＋浮遊ループ、背景の巨大アウトライン英字、
- * 物理演算のワードピース（ドラッグ可能）で構成する。
+ * 物理演算のパズルピース型ワード（ドラッグ可能）で構成する。
  */
 export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
   const rootRef = useRef<HTMLElement>(null);
@@ -38,12 +39,13 @@ export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
     if (!root) return;
     const ctx = gsap.context(() => {
       const chars = gsap.utils.toArray<HTMLElement>('.page-hero__char');
+      // titleJa / lead は任意のため、存在する要素のみアニメーション対象にする
+      const subTargets = ['.page-hero__ja', '.page-hero__lead'].filter((sel) =>
+        root.querySelector(sel),
+      );
       if (prefersReducedMotion()) {
         gsap.set(chars, { opacity: 1, yPercent: 0, rotate: 0 });
-        gsap.set(['.page-hero__eyebrow', '.page-hero__ja', '.page-hero__lead'], {
-          opacity: 1,
-          y: 0,
-        });
+        gsap.set(['.page-hero__eyebrow', ...subTargets], { opacity: 1, y: 0 });
         return;
       }
       const tl = gsap.timeline({ defaults: { ease: 'back.out(1.8)' } });
@@ -52,43 +54,38 @@ export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
         { opacity: 0, y: 18 },
         { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' },
         0,
-      )
-        .fromTo(
-          chars,
-          {
-            opacity: 0,
-            yPercent: 130,
-            rotate: () => gsap.utils.random(-26, 26),
-          },
-          {
-            opacity: 1,
-            yPercent: 0,
-            rotate: 0,
-            duration: 0.9,
-            stagger: 0.06,
-          },
-          0.1,
-        )
-        .fromTo(
-          '.page-hero__ja',
+      ).fromTo(
+        chars,
+        {
+          opacity: 0,
+          yPercent: 130,
+          rotate: () => gsap.utils.random(-26, 26),
+        },
+        {
+          opacity: 1,
+          yPercent: 0,
+          rotate: 0,
+          duration: 0.9,
+          stagger: 0.06,
+        },
+        0.1,
+      );
+      subTargets.forEach((sel) => {
+        tl.fromTo(
+          sel,
           { opacity: 0, y: 24 },
           { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
           '-=0.5',
-        )
-        .fromTo(
-          '.page-hero__lead',
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
-          '-=0.55',
-        )
-        // 出現後もタイトルがゆっくり浮遊し続ける
-        .to('.page-hero__title', {
-          y: -8,
-          duration: 2.6,
-          yoyo: true,
-          repeat: -1,
-          ease: 'sine.inOut',
-        });
+        );
+      });
+      // 出現後もタイトルがゆっくり浮遊し続ける
+      tl.to('.page-hero__title', {
+        y: -8,
+        duration: 2.6,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+      });
     }, root);
     return () => ctx.revert();
   }, [title]);
@@ -107,14 +104,11 @@ export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
             aria-hidden="true"
           >
             {words.map((text, i) => (
-              <div
+              <WordPiece
                 key={text}
-                className={`hero__piece hero__piece--${
-                  text === '?' ? 'piece' : PIECE_VARIANTS[i % PIECE_VARIANTS.length]
-                }`}
-              >
-                {text}
-              </div>
+                text={text}
+                variant={text === '?' ? 'piece' : PIECE_VARIANTS[i % PIECE_VARIANTS.length]}
+              />
             ))}
           </div>
         </div>
@@ -131,7 +125,7 @@ export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
             ))}
           </span>
         </h1>
-        <p className="page-hero__ja">{titleJa}</p>
+        {titleJa && <p className="page-hero__ja">{titleJa}</p>}
         {lead && <p className="page-hero__lead">{lead}</p>}
       </div>
     </section>

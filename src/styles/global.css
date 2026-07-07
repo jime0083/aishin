@@ -422,6 +422,20 @@ main,
   line-height: 1.6;
 }
 
+/* パズルピース型切り抜き: 外側ラッパーがSVGクリップを担い、
+   内側 .img-ph のスクロール連動マスクリビール（clip-path inset）と共存させる */
+.img-ph-puzzle {
+  position: relative;
+  width: 100%;
+}
+
+.img-ph-puzzle .img-ph {
+  position: absolute;
+  inset: 0;
+  border: none;
+  border-radius: 0;
+}
+
 /* 曲線的な切り抜き形状（border-radiusのみで実現し、
    スクロール連動のclip-pathマスクリビールと共存させる） */
 .img-ph--blob1 {

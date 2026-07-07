@@ -4,6 +4,7 @@ import Matter from 'matter-js';
 import gsap from 'gsap';
 import LiquidBg from '../components/LiquidBg';
 import Marquee from '../components/Marquee';
+import WordPiece from '../components/WordPiece';
 
 /** 物理演算で降ってくる「言葉のピース」 */
 const WORD_PIECES: { text: string; variant: string }[] = [
@@ -233,9 +234,7 @@ export default function Hero({ start }: Props) {
             aria-hidden="true"
           >
             {WORD_PIECES.map((p) => (
-              <div key={p.text} className={`hero__piece hero__piece--${p.variant}`}>
-                {p.text}
-              </div>
+              <WordPiece key={p.text} text={p.text} variant={p.variant} />
             ))}
           </div>
         </div>

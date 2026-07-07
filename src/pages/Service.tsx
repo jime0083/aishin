@@ -16,7 +16,6 @@ type ServiceItem = {
   steps: string[];
   imgId: string;
   imgLabel: string;
-  shape: 'blob1' | 'blob2' | 'arch';
 };
 
 const SERVICES: ServiceItem[] = [
@@ -48,7 +47,6 @@ const SERVICES: ServiceItem[] = [
     steps: ['現状分析・課題の構造化', '戦略オプションの設計', '実行計画への落とし込み', '伴走・定着支援'],
     imgId: 'IMG-S01',
     imgLabel: '戦略ディスカッションの風景',
-    shape: 'blob1',
   },
   {
     num: '02',
@@ -78,7 +76,6 @@ const SERVICES: ServiceItem[] = [
     steps: ['業務・データの棚卸し', 'DXロードマップ策定', 'ツール選定・導入・開発', '現場定着・内製化支援'],
     imgId: 'IMG-S02',
     imgLabel: 'データダッシュボードを囲むチーム',
-    shape: 'arch',
   },
   {
     num: '03',
@@ -108,7 +105,6 @@ const SERVICES: ServiceItem[] = [
     steps: ['機会探索・アイデア創出', '仮説検証・MVP開発', '事業化・ローンチ', 'グロース支援'],
     imgId: 'IMG-S03',
     imgLabel: '付箋を使ったワークショップ風景',
-    shape: 'blob2',
   },
 ];
 
@@ -117,10 +113,9 @@ export default function Service() {
 
   return (
     <>
+      {/* 日本語サブ・導入文はユーザー指示（P-012）により表示しない */}
       <PageHero
         title="SERVICE"
-        titleJa="サービス紹介"
-        lead="戦略・テクノロジー・事業創造。3つの現場で、クライアントの「まだ見ぬピース」を発明する。"
         words={['STRATEGY', 'DX', 'NEW BIZ', 'DATA', 'LOGIC', 'CREATIVE', '?']}
       />
 
@@ -161,7 +156,7 @@ export default function Service() {
                     id={s.imgId}
                     label={s.imgLabel}
                     ratio="4 / 3"
-                    shape={s.shape}
+                    shape="puzzle"
                   />
                 </div>
                 <div className="svc__body">

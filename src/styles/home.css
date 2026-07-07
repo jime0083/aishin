@@ -43,50 +43,83 @@
   inset: 0;
 }
 
+/* パズルのピース型ワード（SVG背景＋テキスト。会社テーマに合わせた形状） */
 .hero__piece {
   position: absolute;
   top: 0;
   left: 0;
   transform: translate(-200vw, -200vh);
-  padding: 0.9em 1.5em;
+  /* 上タブ・右タブ・下ノッチ・左ノッチを避けてテキストを本体中央に置く余白 */
+  padding: 1.2em 2.2em 0.95em 1.7em;
   font-family: var(--font-en);
   font-weight: 700;
   font-size: clamp(0.85rem, 1.6vw, 1.15rem);
   letter-spacing: 0.08em;
-  border-radius: 26px;
   white-space: nowrap;
   will-change: transform;
   user-select: none;
-  box-shadow: 0 10px 24px rgba(38, 34, 29, 0.1);
+  filter: drop-shadow(0 10px 16px rgba(38, 34, 29, 0.14));
+}
+
+.hero__piece-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__piece-svg path {
+  stroke-width: 0;
+}
+
+.hero__piece-text {
+  position: relative;
 }
 
 .hero__piece--solid {
-  background: var(--orange);
   color: #fff;
+}
+
+.hero__piece--solid .hero__piece-svg path {
+  fill: var(--orange);
 }
 
 .hero__piece--outline {
-  background: var(--paper);
   color: var(--ink);
-  border: 2px solid var(--ink);
+}
+
+.hero__piece--outline .hero__piece-svg path {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2px;
 }
 
 .hero__piece--yellow {
-  background: var(--yellow);
   color: var(--ink);
 }
 
+.hero__piece--yellow .hero__piece-svg path {
+  fill: var(--yellow);
+}
+
 .hero__piece--white {
-  background: #fff;
   color: var(--orange);
-  border: 1px solid var(--line);
+}
+
+.hero__piece--white .hero__piece-svg path {
+  fill: #fff;
+  stroke: var(--line);
+  stroke-width: 1.5px;
 }
 
 .hero__piece--piece {
-  background: var(--blue);
   color: #fff;
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  padding: 0.7em 1.1em;
+  padding: 1em 1.7em 0.8em 1.35em;
+}
+
+.hero__piece--piece .hero__piece-svg path {
+  fill: var(--blue);
 }
 
 /* 動きを減らす設定時は静的に並べる */
