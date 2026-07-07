@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+// INTERVIEW は一覧ページ廃止に伴いナビから削除（トップのセクションから各詳細へ遷移）
 const NAV_ITEMS = [
   { to: '/', label: 'ABOUT' },
   { to: '/service', label: 'SERVICE' },
   { to: '/works', label: 'WORKS' },
-  { to: '/interview', label: 'INTERVIEW' },
   { to: '/career', label: 'CAREER' },
 ];
 

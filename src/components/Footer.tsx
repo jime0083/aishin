@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
+// INTERVIEW は一覧ページ廃止に伴いリンクから削除（トップのセクションから各詳細へ遷移）
 const FOOTER_LINKS = [
   { to: '/', label: 'ABOUT' },
   { to: '/service', label: 'SERVICE' },
   { to: '/works', label: 'WORKS' },
-  { to: '/interview', label: 'INTERVIEW' },
   { to: '/career', label: 'CAREER' },
   { to: '/entry', label: 'ENTRY' },
 ];

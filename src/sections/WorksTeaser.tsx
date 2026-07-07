@@ -29,7 +29,7 @@ export default function WorksTeaser() {
       <GiantWord text="WORKS" side="left" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
-          <span className="section__eyebrow-num">04</span> WORKS
+          <span className="section__eyebrow-num">03</span> WORKS
         </p>
         <div className="section__head" data-reveal>
           <h2 className="section__title">

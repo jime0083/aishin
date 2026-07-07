@@ -3,6 +3,8 @@ type Props = {
   label: string;
   /** aspect-ratio (e.g. "4 / 3") */
   ratio?: string;
+  /** 曲線的な切り抜き形状（未指定なら従来の角丸矩形） */
+  shape?: 'blob1' | 'blob2' | 'arch' | 'pill';
   className?: string;
 };
 
@@ -10,10 +12,10 @@ type Props = {
  * 画像差し込み予定地のフレーム。
  * img.txt の一覧と同じ ID を表示し、後から実画像に置き換える。
  */
-export default function ImagePlaceholder({ id, label, ratio = '4 / 3', className }: Props) {
+export default function ImagePlaceholder({ id, label, ratio = '4 / 3', shape, className }: Props) {
   return (
     <div
-      className={`img-ph ${className ?? ''}`}
+      className={`img-ph ${shape ? `img-ph--${shape}` : ''} ${className ?? ''}`}
       style={{ aspectRatio: ratio }}
       role="img"
       aria-label={`画像プレースホルダー: ${label}`}

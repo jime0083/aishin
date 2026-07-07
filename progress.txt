@@ -55,6 +55,136 @@ problem.txt の P-008〜P-010 に対応するタスク一覧。
 - [x] T-24: 型チェック・ビルド・デプロイ・記録更新
 
 ====================================
+タスク管理（Phase 6: 下層ページ作成）
+====================================
+2026-07-07 ユーザー指示＋質問回答で確定した仕様:
+- SERVICE: トップページの3サービスを詳細化した下層ページを作成。トップのSERVICEセクションは削除する
+- WORKS: 過去の実績5件を紹介するページ（「5つ」であることのページ内明示は不要）
+- CAREER: https://recruit.positive.co.jp/graduates/ のCareerセクションの内容をトレース
+  （デザインは当サイトのもの。固有名詞はアイシン向けに置換 例: PDPカレッジ→AISHINカレッジ）
+- ENTRY: https://mirai-kirei.jp/contact/ の内容をトレース（フッターはトレースしない。
+  送信はダミー動作＝バリデーション＋送信完了表示のみ。問い合わせ種類等は採用向けに置換）
+- INTERVIEW: 一覧ページは作成しない。トップのインタビューセクションの各社員クリックで
+  個別詳細ページ（/interview/:id）へ遷移。構成のトレース元: https://recruit.positive.co.jp/member/member_07
+  （大型ビジュアル→プロフィール→Q&A見出し3本＋写真→他社員リンク）。
+  ヘッダー・フッターのINTERVIEWリンクは削除
+- 全ページ共通: 物理演算UI×キネティック文字×スクロール連動を徹底／
+  画像は曲線的に切り抜き1つ1つ大きく配置／画像はプレースホルダー枠のみ（必要画像はimg.txtに記録）／
+  グリッド整列（.container ライン）を徹底
+
+開発フロー（CLAUDE.md ルール6）: 1ページ完成→ビルド→デプロイ→★作業停止・ユーザー確認★
+→修正指示をproblem.txtに記録→修正→全パス→次ページへ。
+実装順: SERVICE → WORKS → INTERVIEW詳細 → CAREER → ENTRY
+
+■ ステップ1: SERVICEページ（共通基盤もここで実装）
+- [ ] T-27: ImagePlaceholder に曲線切り抜き対応を追加
+        対象: src/components/ImagePlaceholder.tsx / src/styles/global.css
+        内容: props に shape?: 'blob1' | 'blob2' | 'arch' | 'pill' を追加し、
+        .img-ph--blob1 等のクラスで clip-path / border-radius による有機的な曲線マスクを実装。
+        shape 未指定の既存使用箇所は従来表示のまま（後方互換）
+- [ ] T-28: 下層ページ共通ヒーロー PageHero を新規作成
+        対象: src/components/PageHero.tsx（新規）/ src/styles/subpage.css（新規・main.tsxでimport）
+        内容: props { title: string(英語見出し); titleJa: string; lead?: string }。
+        英語見出しを1文字ずつキネティック出現（gsap, トップのFVと同様のドロップイン）、
+        背景に巨大アウトライン英字、スクロールでパララックス。グリッドは .container 準拠
+- [ ] T-29: ルーティング変更
+        対象: src/App.tsx
+        内容: /service を新ページに差し替え（React.lazy + Suspense でコード分割）。
+        /interview ルートを削除し /interview/:id を追加（ページ本体はステップ3で実装するため
+        暫定で ComingSoon を割当）。/works /career /entry は実装ステップまで ComingSoon のまま
+- [ ] T-30: ヘッダー・フッターから INTERVIEW リンクを削除
+        対象: src/components/Header.tsx（NAV_ITEMS）/ src/components/Footer.tsx（FOOTER_LINKS）
+- [ ] T-31: SERVICEページのデータ定義とページ骨格を作成
+        対象: src/pages/Service.tsx（新規）
+        内容: 現行 ServiceTeaser の3サービス（Strategy Consulting／DX Acceleration／
+        New Business Design）を詳細化したデータを定義。各サービス =
+        { num, title(EN), jp, lead, 課題リスト3点, 提供内容3点, 進め方4ステップ, imgId, imgLabel }。
+        構成: PageHero → サービス3件（左右交互レイアウト・曲線切り抜き大画像 IMG-S01〜S03）
+        → ENTRY への CTA
+- [ ] T-32: SERVICEページのスタイルとスクロール連動アニメーションを実装
+        対象: src/styles/subpage.css / src/pages/Service.tsx
+        内容: 左右交互の大画像レイアウト（画像は画面幅の~50%で大きく）、
+        既存の data-reveal / data-reveal-group / GiantWord / マスクリビールを流用して
+        スクロール連動演出を付与。グリッド整列（.container）を厳守
+- [ ] T-33: トップページから SERVICE セクションを削除
+        対象: src/pages/Home.tsx（ServiceTeaser の import と描画、velocity skew 対象
+        '.service__cards' を削除）/ src/sections/ServiceTeaser.tsx（ファイル削除）
+- [ ] T-34: img.txt に SERVICE ページの必要画像（IMG-S01〜S03）を追記
+        内容: 曲線切り抜き前提であること・被写体・推奨サイズを記載
+- [ ] T-35: 型チェック（npx tsc --noEmit）→ ビルド → デプロイ → progress.txt 更新
+        → ★作業停止・ユーザー確認待ち★
+
+■ ステップ2: WORKSページ（ステップ1の全修正パス後に着手）
+- [ ] T-36: WORKSページのデータ定義とページ骨格を作成
+        対象: src/pages/Works.tsx（新規）
+        内容: 架空の実績5件を定義。各実績 = { num('01'〜'05'), クライアント業種,
+        タイトル, タグ(戦略/DX/新規事業), 課題, 支援内容, 成果(数値1つ含む), imgId }。
+        構成: PageHero → 実績5件の縦積みリスト（曲線切り抜き大画像 IMG-W01〜W05）
+        ※件数が5件であることの文言明示はしない
+- [ ] T-37: WORKSページのスタイルとスクロール連動を実装
+        対象: src/styles/subpage.css / src/pages/Works.tsx
+        内容: 番号の巨大タイポ＋大画像＋成果数値のカウントアップ（既存 data-count 流用）、
+        data-reveal 系のスクロール演出
+- [ ] T-38: ルーティング差し替え（/works）と img.txt 追記（IMG-W01〜W05）
+        対象: src/App.tsx / img.txt
+- [ ] T-39: 型チェック → ビルド → デプロイ → progress.txt 更新 → ★作業停止・ユーザー確認待ち★
+
+■ ステップ3: INTERVIEW詳細ページ（3名分）
+- [ ] T-40: インタビューデータを定義
+        対象: src/data/interviews.ts（新規）
+        内容: 3名分の配列。各社員 = { id('01'〜'03'), name, nameEn, joinYear, position,
+        career(経歴文), qa: [{ heading, body }]×3, portraitImgId(既存IMG-09〜11),
+        photoImgIds(本文中写真 IMG-I01〜I03) }。トップの InterviewTeaser の3名と整合させる
+- [ ] T-41: インタビュー詳細ページを作成
+        対象: src/pages/InterviewDetail.tsx（新規）
+        内容: useParams で id 取得（不正idは NOT FOUND 表示）。構成は member_07 トレース:
+        大型ビジュアル（曲線切り抜きポートレート＋名前の巨大タイポ）→ プロフィール
+        （入社年・役職・氏名・経歴）→ Q&A 3本（見出し＋本文＋写真）→ 他社員へのリンク
+        → ENTRY への CTA
+- [ ] T-42: トップの InterviewTeaser のカードを /interview/:id へのリンクに変更
+        対象: src/sections/InterviewTeaser.tsx / src/App.tsx（暫定ComingSoonを実ページに差替）
+- [ ] T-43: スタイル実装・img.txt 追記（IMG-I01〜I03）→ 型チェック → ビルド → デプロイ
+        → progress.txt 更新 → ★作業停止・ユーザー確認待ち★
+
+■ ステップ4: CAREERページ
+- [ ] T-44: CAREERページのデータ定義とページ骨格を作成
+        対象: src/pages/Career.tsx（新規）
+        内容: トレース元（recruit.positive.co.jp/graduates/ の Career セクション）の構成を
+        アイシン向けに置換して定義:
+        1) 見出し「成長に、終わりはないから。AISHINのキャリアサポート」
+        2) 多彩なキャリアを自ら描ける 3) 任せる。だから20代で活躍できる
+        4) AISHINカレッジシステム（研修制度） 5) MBO制度（3ヶ月サイクルの目標設定）
+        6) 福利厚生・支援制度リスト10項目（カフェテリアプラン等をアイシン向け名称に置換）
+        構成: PageHero → 4項目（曲線切り抜き大画像 IMG-C01〜C02 を交互配置）
+        → 制度リスト（カードグリッド） → ENTRY への CTA
+- [ ] T-45: スタイル・スクロール連動実装、ルーティング差し替え（/career）、img.txt 追記
+        対象: src/styles/subpage.css / src/App.tsx / img.txt
+- [ ] T-46: 型チェック → ビルド → デプロイ → progress.txt 更新 → ★作業停止・ユーザー確認待ち★
+
+■ ステップ5: ENTRYページ
+- [ ] T-47: ENTRYフォームページを作成
+        対象: src/pages/Entry.tsx（新規）
+        内容: トレース元（mirai-kirei.jp/contact/）の項目を採用向けに置換:
+        応募種類（必須・セレクト: 新卒採用/中途採用/インターン/カジュアル面談/その他）、
+        当社を知ったきっかけ（必須・セレクト: 就活サイト/求人媒体/SNS/ニュースサイト/
+        知人からの紹介/その他）、お名前（必須）、現在の所属＝学校名・会社名（必須）、
+        電話番号（必須）、メールアドレス（必須）、志望動機・メッセージ（必須・textarea）、
+        個人情報の取り扱いへの同意チェック（必須）
+- [ ] T-48: バリデーションとダミー送信を実装
+        対象: src/pages/Entry.tsx
+        内容: 未入力・形式不正（メール/電話）のエラーメッセージ表示。
+        全項目OK＋同意チェックで送信ボタン活性化 → クリックで送信完了画面
+        （実送信はしない。後日バックエンド接続可能な構造にする）
+- [ ] T-49: スタイル実装（フォームも当サイトのデザイン: キネティック見出し・オレンジアクセント）、
+        ルーティング差し替え（/entry）
+        対象: src/styles/subpage.css / src/App.tsx
+- [ ] T-50: 型チェック → ビルド → デプロイ → progress.txt 更新 → ★作業停止・ユーザー確認待ち★
+
+■ ステップ6: 仕上げ
+- [ ] T-51: CLAUDE.md のページ構成表を更新（INTERVIEW仕様変更・全ページの状態を反映）
+- [ ] T-52: 全ページ横断でグリッド整列・アニメーション動作を最終確認 → デプロイ → 記録更新
+
+====================================
 進捗
 ====================================
 
@@ -107,6 +237,6 @@ problem.txt の P-008〜P-010 に対応するタスク一覧。
   - 効果が薄い場合は案D（キービジュアル写真）へ切替予定
 - 型チェック・ビルド・GitHub Pagesデプロイ完了
 
-### 未着手（ユーザー指示待ち）
-- 下層ページ: /service /works /interview /career /entry（現在は Coming Soon 表示）
-- 画像素材の差し込み（ユーザーが img.txt を基に用意予定）
+### 未着手
+- Phase 6: 下層ページ作成（T-27〜T-38。仕様確定済み・上記タスク管理欄を参照）
+- 画像素材の差し込み（全ページ完成後にユーザーが img.txt を基に用意予定）

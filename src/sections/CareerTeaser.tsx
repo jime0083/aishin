@@ -23,7 +23,7 @@ export default function CareerTeaser() {
       <GiantWord text="GROWTH" side="left" />
       <div className="container">
         <p className="section__eyebrow" data-reveal>
-          <span className="section__eyebrow-num">06</span> CAREER SUPPORT
+          <span className="section__eyebrow-num">05</span> CAREER SUPPORT
         </p>
         <div className="career__grid">
           <div className="career__text" data-reveal>

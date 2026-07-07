@@ -1,0 +1,269 @@
+/* ============================================
+   下層ページ共通スタイル
+============================================ */
+
+/* --------------------------------------------
+   Page Hero（下層ページ共通ヒーロー）
+-------------------------------------------- */
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(480px, 72svh, 720px);
+  padding-block: calc(var(--header-h) + 3rem) 3rem;
+  /* トップFVと同じドットグリッドで世界観を揃える */
+  background-image: radial-gradient(circle, #e7ddca 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+
+.page-hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+}
+
+.page-hero__stage:active {
+  cursor: grabbing;
+}
+
+.page-hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  pointer-events: none;
+}
+
+.page-hero__eyebrow {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+  letter-spacing: 0.34em;
+  color: var(--ink-soft);
+  margin-bottom: 1.4rem;
+  opacity: 0;
+}
+
+.page-hero__title {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(3rem, 11vw, 7rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+}
+
+.page-hero__line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.page-hero__char {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.page-hero__ja {
+  color: var(--orange);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  margin-top: 0.6rem;
+  opacity: 0;
+}
+
+.page-hero__lead {
+  max-width: 640px;
+  margin-top: 1.4rem;
+  opacity: 0;
+}
+
+/* --------------------------------------------
+   SERVICE ページ
+-------------------------------------------- */
+.svc-intro {
+  padding-bottom: 0;
+}
+
+.svc-intro__body {
+  max-width: 680px;
+  display: grid;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.svc__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+/* 左右交互レイアウト（画像を右側に） */
+.svc__grid--flip .svc__media {
+  order: 2;
+}
+
+.svc__grid--flip .svc__body {
+  order: 1;
+}
+
+.svc__media {
+  position: relative;
+  padding-top: 1.5rem;
+}
+
+/* 巨大なアウトライン番号を画像に重ねる */
+.svc__num {
+  position: absolute;
+  top: -0.12em;
+  left: -0.1em;
+  z-index: 2;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(4rem, 8vw, 6.5rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--orange);
+  pointer-events: none;
+}
+
+.svc__grid--flip .svc__num {
+  left: auto;
+  right: -0.1em;
+}
+
+.svc__jp {
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+.svc__lead {
+  margin-top: 1.4rem;
+}
+
+.svc__label {
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  font-weight: 900;
+  font-size: 0.95rem;
+  margin: 2rem 0 0.9rem;
+}
+
+.svc__label::before {
+  content: '';
+  width: 1.7em;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--orange);
+}
+
+.svc__challenges li {
+  position: relative;
+  padding-left: 1.6em;
+  padding-block: 0.3em;
+  font-size: 0.92rem;
+}
+
+.svc__challenges li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--orange);
+  font-weight: 900;
+}
+
+/* 提供内容カード */
+.svc__points {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.svc__point {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.6rem 1.8rem;
+}
+
+.svc__point-num {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+}
+
+.svc__point h3 {
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.6;
+  margin-top: 0.4rem;
+}
+
+.svc__point p {
+  font-size: 0.88rem;
+  margin-top: 0.8rem;
+}
+
+/* 進め方ステップ */
+.svc__steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.8rem, 1.6vw, 1.2rem);
+}
+
+.svc__step {
+  position: relative;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem 1.2rem;
+}
+
+.svc__step-num {
+  display: block;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--orange);
+  margin-bottom: 0.4rem;
+}
+
+.svc__step-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+/* --------------------------------------------
+   Responsive
+-------------------------------------------- */
+@media (max-width: 900px) {
+  .svc__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* モバイルでは常に 画像 → テキスト の順 */
+  .svc__grid--flip .svc__media {
+    order: 1;
+  }
+
+  .svc__grid--flip .svc__body {
+    order: 2;
+  }
+
+  .svc__points {
+    grid-template-columns: 1fr;
+  }
+
+  .svc__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

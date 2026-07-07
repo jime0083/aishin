@@ -422,6 +422,24 @@ main,
   line-height: 1.6;
 }
 
+/* 曲線的な切り抜き形状（border-radiusのみで実現し、
+   スクロール連動のclip-pathマスクリビールと共存させる） */
+.img-ph--blob1 {
+  border-radius: 58% 42% 55% 45% / 48% 55% 45% 52%;
+}
+
+.img-ph--blob2 {
+  border-radius: 44% 56% 48% 52% / 58% 44% 56% 42%;
+}
+
+.img-ph--arch {
+  border-radius: 999px 999px var(--radius) var(--radius);
+}
+
+.img-ph--pill {
+  border-radius: 999px;
+}
+
 /* ============================================
    Floating Background（ページ全体の浮遊シェイプ）
 ============================================ */

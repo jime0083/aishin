@@ -386,68 +386,6 @@
 }
 
 /* ============================================
-   Service
-============================================ */
-.service__cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.2rem, 2.5vw, 2rem);
-}
-
-.service__card {
-  display: block;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
-}
-
-.service__card:hover {
-  transform: translateY(-8px) rotate(-0.5deg);
-  box-shadow: 0 24px 48px rgba(38, 34, 29, 0.14);
-}
-
-.service__card .img-ph {
-  border-radius: 0;
-  border-inline: none;
-  border-top: none;
-}
-
-.service__card-body {
-  padding: 1.6rem 1.6rem 1.8rem;
-}
-
-.service__card-num {
-  font-family: var(--font-en);
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--orange);
-  letter-spacing: 0.1em;
-}
-
-.service__card-title {
-  font-family: var(--font-en);
-  font-weight: 800;
-  font-size: 1.25rem;
-  line-height: 1.3;
-  margin-top: 0.4rem;
-}
-
-.service__card-jp {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--ink-soft);
-  margin-top: 0.2rem;
-}
-
-.service__card-desc {
-  font-size: 0.88rem;
-  margin-top: 0.9rem;
-  color: var(--ink);
-}
-
-/* ============================================
    Works
 ============================================ */
 .works__cards {
@@ -657,7 +595,6 @@
     grid-template-columns: 1fr;
   }
 
-  .service__cards,
   .works__cards,
   .interview__cards {
     grid-template-columns: 1fr;

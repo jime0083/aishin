@@ -1,27 +1,21 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Hero from '../sections/Hero';
-import Loader from '../components/Loader';
-import Marquee from '../components/Marquee';
-import Mission from '../sections/Mission';
-import About from '../sections/About';
-import WorksTeaser from '../sections/WorksTeaser';
-import InterviewTeaser from '../sections/InterviewTeaser';
-import CareerTeaser from '../sections/CareerTeaser';
-import EntryCta from '../sections/EntryCta';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Home() {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [introDone, setIntroDone] = useState(false);
+type Options = {
+  /** スクロール速度連動のskewを掛ける対象セレクタ（カンマ区切り） */
+  skewTargets?: string;
+};
 
-  // スクロール連動アニメーションの一括登録
+/**
+ * 下層ページ共通のスクロール連動アニメーション一括登録。
+ * トップページ（Home.tsx）と同じ演出言語（data-reveal / data-reveal-group /
+ * .section__title / [data-giant] / [data-count] / .img-ph / .entry__char）を提供する。
+ */
+export default function useSubpageAnimations({ skewTargets }: Options = {}) {
   useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       // 単体要素のフェードイン
@@ -97,41 +91,29 @@ export default function Home() {
       });
 
       // スクロール速度に連動したskew（歪み）演出
-      const skewTargets = gsap.utils.toArray<HTMLElement>(
-        '.mission__statement, .works__cards, .interview__cards, .career__list',
-      );
-      const skewSetters = skewTargets.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
-      const skewProxy = { value: 0 };
-      const applySkew = () => skewSetters.forEach((set) => set(skewProxy.value));
-      ScrollTrigger.create({
-        onUpdate: (self) => {
-          const velocity = gsap.utils.clamp(-6, 6, self.getVelocity() / -400);
-          if (Math.abs(velocity) > Math.abs(skewProxy.value)) {
-            skewProxy.value = velocity;
-            gsap.to(skewProxy, {
-              value: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-              overwrite: true,
-              onUpdate: applySkew,
-            });
-          }
-        },
-      });
-
-      // ミッションの行ごとのマスクリビール（キネティック文字）
-      gsap.utils.toArray<HTMLElement>('[data-reveal-line] .mission__line-inner').forEach((el) => {
-        gsap.fromTo(
-          el,
-          { yPercent: 110 },
-          {
-            yPercent: 0,
-            duration: 1,
-            ease: 'power4.out',
-            scrollTrigger: { trigger: el, start: 'top 88%' },
-          },
-        );
-      });
+      if (skewTargets) {
+        const targets = gsap.utils.toArray<HTMLElement>(skewTargets);
+        if (targets.length > 0) {
+          const setters = targets.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
+          const proxy = { value: 0 };
+          const apply = () => setters.forEach((set) => set(proxy.value));
+          ScrollTrigger.create({
+            onUpdate: (self) => {
+              const velocity = gsap.utils.clamp(-6, 6, self.getVelocity() / -400);
+              if (Math.abs(velocity) > Math.abs(proxy.value)) {
+                proxy.value = velocity;
+                gsap.to(proxy, {
+                  value: 0,
+                  duration: 0.8,
+                  ease: 'power3.out',
+                  overwrite: true,
+                  onUpdate: apply,
+                });
+              }
+            },
+          });
+        }
+      }
 
       // 数字のカウントアップ
       gsap.utils.toArray<HTMLElement>('[data-count]').forEach((el) => {
@@ -163,36 +145,24 @@ export default function Home() {
         );
       });
 
-      // ENTRYの巨大文字が下から順にせり上がる
-      gsap.fromTo(
-        '.entry__char',
-        { yPercent: 60, opacity: 0 },
-        {
-          yPercent: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: 'back.out(1.6)',
-          stagger: 0.07,
-          scrollTrigger: { trigger: '.entry', start: 'top 70%' },
-        },
-      );
+      // ENTRY CTA の巨大文字が下から順にせり上がる（EntryCta 使用ページのみ）
+      const entryChars = gsap.utils.toArray<HTMLElement>('.entry__char');
+      if (entryChars.length > 0) {
+        gsap.fromTo(
+          entryChars,
+          { yPercent: 60, opacity: 0 },
+          {
+            yPercent: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'back.out(1.6)',
+            stagger: 0.07,
+            scrollTrigger: { trigger: '.entry', start: 'top 70%' },
+          },
+        );
+      }
     });
 
     return () => mm.revert();
-  }, []);
-
-  return (
-    <div ref={rootRef}>
-      <Loader onReveal={() => setIntroDone(true)} />
-      <Hero start={introDone} />
-      <Mission />
-      <About />
-      {/* SERVICEセクションは下層ページ化に伴い削除（/service に統合） */}
-      <WorksTeaser />
-      <InterviewTeaser />
-      <CareerTeaser />
-      <Marquee text="JOIN US — INVENT YOUR OWN PIECE — " reverse tilt />
-      <EntryCta />
-    </div>
-  );
+  }, [skewTargets]);
 }
