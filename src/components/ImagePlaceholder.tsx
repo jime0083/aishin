@@ -6,7 +6,7 @@ type Props = {
   /** aspect-ratio (e.g. "4 / 3") */
   ratio?: string;
   /** 切り抜き形状（未指定なら従来の角丸矩形）。puzzle-left は凸タブが左・右端フラット */
-  shape?: 'puzzle' | 'puzzle-left' | 'blob1' | 'blob2' | 'arch' | 'pill';
+  shape?: 'puzzle' | 'puzzle-left' | 'ellipse' | 'blob1' | 'blob2' | 'arch' | 'pill';
   className?: string;
 };
 

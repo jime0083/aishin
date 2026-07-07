@@ -91,11 +91,12 @@ export default function InterviewDetail() {
         </div>
         <div className="container itv-hero__grid">
           <div className="itv-hero__media">
+            {/* FVのポートレートは縦長の楕円で切り抜く（P-021） */}
             <ImagePlaceholder
               id={member.portraitImgId}
               label={member.portraitImgLabel}
               ratio="3 / 4"
-              shape="puzzle"
+              shape="ellipse"
             />
           </div>
           <div className="itv-hero__body">
