@@ -470,6 +470,162 @@
 }
 
 /* --------------------------------------------
+   ENTRY ページ（エントリーフォーム）
+-------------------------------------------- */
+.ent__lead {
+  max-width: 680px;
+  margin-top: 1.6rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.ent__note {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.ent__form {
+  max-width: 760px;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.8rem, 4vw, 3rem);
+  display: grid;
+  gap: 1.6rem;
+}
+
+.ent__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ent__field label {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.ent__required {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--orange);
+  border-radius: 6px;
+  padding: 0.15em 0.7em;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+.ent__field input,
+.ent__field select,
+.ent__field textarea {
+  font: inherit;
+  width: 100%;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 0.8em 1em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ent__field input:focus,
+.ent__field select:focus,
+.ent__field textarea:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.15);
+}
+
+.ent__field textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.ent__error {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--orange-deep);
+}
+
+.ent__privacy {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 1.2rem 1.4rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ent__privacy h3 {
+  font-size: 0.95rem;
+  font-weight: 900;
+  margin-bottom: 0.8rem;
+}
+
+.ent__privacy ol {
+  display: grid;
+  gap: 0.6rem;
+  padding-left: 1.4em;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.ent__agree {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ent__agree input {
+  width: 1.2em;
+  height: 1.2em;
+  accent-color: var(--orange);
+}
+
+.ent__submit {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  padding: 1.1em 2.8em;
+  border-radius: 999px;
+  transition: background-color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+
+.ent__submit:not(:disabled):hover {
+  background: var(--orange);
+  transform: translateY(-2px);
+}
+
+.ent__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ent__submit-note {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.ent__done {
+  min-height: 40vh;
+}
+
+.ent__done-body {
+  max-width: 640px;
+  margin-block: 1.6rem 2.4rem;
+}
+
+/* --------------------------------------------
    Responsive
 -------------------------------------------- */
 @media (max-width: 900px) {
