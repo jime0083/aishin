@@ -484,8 +484,9 @@
   color: var(--ink-soft);
 }
 
+/* フォームは他ページと同じ .container の左右ラインいっぱいに広げる（P-024） */
 .ent__form {
-  max-width: 760px;
+  width: 100%;
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   background: #fff;
   border: 1px solid var(--line);
