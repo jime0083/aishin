@@ -129,9 +129,10 @@
   pointer-events: none;
 }
 
+/* 番号の右端を画像（右端フラットの左向きピース）の右ラインに揃える（P-015） */
 .svc__grid--flip .svc__num {
   left: auto;
-  right: -0.1em;
+  right: 0;
 }
 
 .svc__jp {

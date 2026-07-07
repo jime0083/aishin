@@ -49,8 +49,8 @@
   top: 0;
   left: 0;
   transform: translate(-200vw, -200vh);
-  /* 上タブ・右タブ・下ノッチ・左ノッチを避けてテキストを本体中央に置く余白 */
-  padding: 1.2em 2.2em 0.95em 1.7em;
+  /* タブ・ノッチの張り出しを考慮し、本体の縁と文字の間が上・左右20px程度になる余白（P-014） */
+  padding: 32px 44px 24px 40px;
   font-family: var(--font-en);
   font-weight: 700;
   font-size: clamp(0.85rem, 1.6vw, 1.15rem);
@@ -115,7 +115,7 @@
 .hero__piece--piece {
   color: #fff;
   font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  padding: 1em 1.7em 0.8em 1.35em;
+  padding: 30px 42px 22px 38px;
 }
 
 .hero__piece--piece .hero__piece-svg path {

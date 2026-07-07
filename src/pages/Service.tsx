@@ -152,11 +152,12 @@ export default function Service() {
                   <span className="svc__num" aria-hidden="true">
                     {s.num}
                   </span>
+                  {/* 画像が右列に来る場合は左向きピース（右端フラット）で右ラインを揃える */}
                   <ImagePlaceholder
                     id={s.imgId}
                     label={s.imgLabel}
                     ratio="4 / 3"
-                    shape="puzzle"
+                    shape={flip ? 'puzzle-left' : 'puzzle'}
                   />
                 </div>
                 <div className="svc__body">

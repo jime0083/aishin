@@ -1,12 +1,12 @@
-import { PUZZLE_PATH } from './puzzleShape';
+import { PUZZLE_PATH, PUZZLE_PATH_LEFT } from './puzzleShape';
 
 type Props = {
   id: string;
   label: string;
   /** aspect-ratio (e.g. "4 / 3") */
   ratio?: string;
-  /** 切り抜き形状（未指定なら従来の角丸矩形） */
-  shape?: 'puzzle' | 'blob1' | 'blob2' | 'arch' | 'pill';
+  /** 切り抜き形状（未指定なら従来の角丸矩形）。puzzle-left は凸タブが左・右端フラット */
+  shape?: 'puzzle' | 'puzzle-left' | 'blob1' | 'blob2' | 'arch' | 'pill';
   className?: string;
 };
 
@@ -28,8 +28,9 @@ export default function ImagePlaceholder({ id, label, ratio = '4 / 3', shape, cl
 
   // パズルピース型: 外側ラッパーでSVGクリップし、
   // 内側の .img-ph はスクロール連動マスクリビール（clip-path inset）の対象のまま残す
-  if (shape === 'puzzle') {
+  if (shape === 'puzzle' || shape === 'puzzle-left') {
     const clipId = `puzzle-clip-${id}`;
+    const path = shape === 'puzzle-left' ? PUZZLE_PATH_LEFT : PUZZLE_PATH;
     return (
       <div
         className={`img-ph-puzzle ${className ?? ''}`}
@@ -38,7 +39,7 @@ export default function ImagePlaceholder({ id, label, ratio = '4 / 3', shape, cl
         <svg width="0" height="0" aria-hidden="true" focusable="false">
           <defs>
             <clipPath id={clipId} clipPathUnits="objectBoundingBox">
-              <path d={PUZZLE_PATH} />
+              <path d={path} />
             </clipPath>
           </defs>
         </svg>
