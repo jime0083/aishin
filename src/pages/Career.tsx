@@ -13,14 +13,15 @@ import useSubpageAnimations from '../hooks/useSubpageAnimations';
 
 type CareerItem = {
   num: string;
-  heading: string;
+  /** 見出し（指定位置で改行するため行配列で持つ） */
+  headingLines: string[];
   paragraphs: string[];
 };
 
 const CAREER_ITEMS: CareerItem[] = [
   {
     num: '01',
-    heading: '多彩なキャリアを、自ら描ける。',
+    headingLines: ['多彩なキャリアを自ら描ける'],
     paragraphs: [
       'アイシンには決まったキャリアのレールがなく、自らの意思で道を切り拓くことができます。戦略・DX・新規事業という複数領域を展開しているため職種やポジションが豊富で、チームや役割の垣根を越えて多様な経験を積めるのが魅力です。',
       '与えられた道ではなく、自ら選び、自ら創るキャリアが実現できる。挑戦する人の可能性を信じ、成長を後押しするカルチャーが根づいています。',
@@ -28,21 +29,21 @@ const CAREER_ITEMS: CareerItem[] = [
   },
   {
     num: '02',
-    heading: '任せる。だから20代で活躍できる。',
+    headingLines: ['任せる。だから20代で活躍できる'],
     paragraphs: [
       'メンバーを信じ、責任ある仕事を任せる文化があります。若手であっても主体的に挑戦できる環境が整っており、20代から組織の中核で活躍するメンバーが育っています。',
     ],
   },
   {
     num: '03',
-    heading: 'ビジネスパーソンとしての成長も。AISHINカレッジシステム',
+    headingLines: ['ビジネスパーソンとしての成長も', 'AISHINカレッジシステム'],
     paragraphs: [
       '役職や職種、年次に応じた研修制度に加え、AISHINビジネスカレッジや社外大学院への通学支援制度、独自のオンライン研修システムを用意。長期的な視点でメンバーのスキルアップをサポートしています。',
     ],
   },
   {
     num: '04',
-    heading: 'スピード感をもった成長を支援。MBO制度',
+    headingLines: ['スピード感ある成長を支援するMBO制度'],
     paragraphs: [
       '目標管理には「チャレンジシート」を導入し、3ヶ月ごとの目標設定と上司からのフィードバックを実施。短いサイクルで振り返ることで、スピード感のある成長を支援します。',
     ],
@@ -130,7 +131,14 @@ export default function Career() {
               {CAREER_ITEMS.slice(0, 2).map((item) => (
                 <div key={item.num} className="crr__item" data-reveal>
                   <span className="crr__item-num">{item.num}</span>
-                  <h3 className="crr__item-heading">{item.heading}</h3>
+                  <h3 className="crr__item-heading">
+                    {item.headingLines.map((line, j) => (
+                      <span key={line}>
+                        {line}
+                        {j < item.headingLines.length - 1 && <br />}
+                      </span>
+                    ))}
+                  </h3>
                   {item.paragraphs.map((p) => (
                     <p key={p.slice(0, 12)} className="crr__item-body">
                       {p}
@@ -160,7 +168,14 @@ export default function Career() {
               {CAREER_ITEMS.slice(2).map((item) => (
                 <div key={item.num} className="crr__item" data-reveal>
                   <span className="crr__item-num">{item.num}</span>
-                  <h3 className="crr__item-heading">{item.heading}</h3>
+                  <h3 className="crr__item-heading">
+                    {item.headingLines.map((line, j) => (
+                      <span key={line}>
+                        {line}
+                        {j < item.headingLines.length - 1 && <br />}
+                      </span>
+                    ))}
+                  </h3>
                   {item.paragraphs.map((p) => (
                     <p key={p.slice(0, 12)} className="crr__item-body">
                       {p}
