@@ -9,6 +9,7 @@ import ComingSoon from './pages/ComingSoon';
 
 // 下層ページはコード分割して初期ロードを軽く保つ
 const Service = lazy(() => import('./pages/Service'));
+const Works = lazy(() => import('./pages/Works'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,7 +31,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/service" element={<Service />} />
-            <Route path="/works" element={<ComingSoon title="WORKS" jp="実績一覧" />} />
+            <Route path="/works" element={<Works />} />
             {/* インタビューは一覧ページを持たず、トップから個別詳細ページへ遷移する仕様 */}
             <Route
               path="/interview/:id"
