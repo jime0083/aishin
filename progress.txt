@@ -133,21 +133,22 @@ problem.txt の P-008〜P-010 に対応するタスク一覧。
         → ★作業停止・ユーザー確認待ち★（2026-07-08 デプロイ済み）
 
 ■ ステップ3: INTERVIEW詳細ページ（3名分）
-- [ ] T-40: インタビューデータを定義
+- [x] T-40: インタビューデータを定義
         対象: src/data/interviews.ts（新規）
         内容: 3名分の配列。各社員 = { id('01'〜'03'), name, nameEn, joinYear, position,
-        career(経歴文), qa: [{ heading, body }]×3, portraitImgId(既存IMG-09〜11),
-        photoImgIds(本文中写真 IMG-I01〜I03) }。トップの InterviewTeaser の3名と整合させる
-- [ ] T-41: インタビュー詳細ページを作成
+        career(経歴文), qa: [{ heading, paragraphs, photo }]×3, portraitImgId(既存IMG-09〜11) }。
+        記事写真は IMG-I01〜I06（各社員2枚）。トップの InterviewTeaser の3名と整合
+- [x] T-41: インタビュー詳細ページを作成
         対象: src/pages/InterviewDetail.tsx（新規）
         内容: useParams で id 取得（不正idは NOT FOUND 表示）。構成は member_07 トレース:
-        大型ビジュアル（曲線切り抜きポートレート＋名前の巨大タイポ）→ プロフィール
-        （入社年・役職・氏名・経歴）→ Q&A 3本（見出し＋本文＋写真）→ 他社員へのリンク
-        → ENTRY への CTA
-- [ ] T-42: トップの InterviewTeaser のカードを /interview/:id へのリンクに変更
-        対象: src/sections/InterviewTeaser.tsx / src/App.tsx（暫定ComingSoonを実ページに差替）
-- [ ] T-43: スタイル実装・img.txt 追記（IMG-I01〜I03）→ 型チェック → ビルド → デプロイ
-        → progress.txt 更新 → ★作業停止・ユーザー確認待ち★
+        大型ビジュアル（パズルピース型ポートレート＋一言のキネティック文字＋落下ピース）
+        → プロフィール（氏名・入社・役職・経歴）→ Q&A 3本（見出し＋本文＋写真）
+        → 他社員へのリンク → ENTRY への CTA
+- [x] T-42: トップの InterviewTeaser のカードを /interview/:id へのリンクに変更
+        対象: src/sections/InterviewTeaser.tsx（ステップ1で対応済み）/
+        src/App.tsx（暫定ComingSoonを実ページに差替）
+- [x] T-43: スタイル実装・img.txt 追記（IMG-I01〜I06）→ 型チェック → ビルド → デプロイ
+        → progress.txt 更新 → ★作業停止・ユーザー確認待ち★（2026-07-08 デプロイ済み）
 
 ■ ステップ4: CAREERページ
 - [ ] T-44: CAREERページのデータ定義とページ骨格を作成

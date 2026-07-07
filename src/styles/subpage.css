@@ -306,6 +306,117 @@
 }
 
 /* --------------------------------------------
+   INTERVIEW 詳細ページ
+-------------------------------------------- */
+.itv-hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: calc(var(--header-h) + 3.5rem) clamp(3rem, 6vw, 5rem);
+  background-image: radial-gradient(circle, #e7ddca 1.5px, transparent 1.5px);
+  background-size: 30px 30px;
+}
+
+.itv-hero__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+  pointer-events: none;
+}
+
+.itv-hero__media {
+  max-width: 440px;
+}
+
+.itv-hero__eyebrow {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+  letter-spacing: 0.34em;
+  color: var(--orange);
+  margin-bottom: 1.4rem;
+  opacity: 0;
+}
+
+.itv-hero__quote {
+  font-weight: 900;
+  font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+.itv-hero__char {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.itv-hero__name {
+  font-weight: 900;
+  font-size: 1.2rem;
+  margin-top: 1.6rem;
+  opacity: 0;
+}
+
+.itv-hero__name-en {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 0.8em;
+  letter-spacing: 0.12em;
+  color: var(--orange);
+  margin-left: 0.6em;
+}
+
+.itv-hero__role {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+  opacity: 0;
+}
+
+/* プロフィールカード（Aboutの会社概要カードと同じトーン） */
+.itv-profile__card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: clamp(1.8rem, 4vw, 3rem);
+}
+
+.itv-qa__heading {
+  max-width: 800px;
+}
+
+.itv-qa__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.itv-qa__grid--single {
+  grid-template-columns: 1fr;
+  max-width: 760px;
+}
+
+.itv-qa__body {
+  display: grid;
+  gap: 1.2rem;
+  max-width: 680px;
+}
+
+/* 写真を左側に置くパターン */
+.itv-qa__media--first {
+  order: -1;
+}
+
+.itv-others__cards {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+/* --------------------------------------------
    Responsive
 -------------------------------------------- */
 @media (max-width: 900px) {
@@ -328,5 +439,19 @@
 
   .svc__steps {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .itv-hero__grid,
+  .itv-qa__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .itv-hero__media {
+    max-width: 340px;
+  }
+
+  /* モバイルでは常に 本文 → 写真 の順 */
+  .itv-qa__media--first {
+    order: 0;
   }
 }

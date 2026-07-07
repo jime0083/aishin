@@ -7,6 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 type Options = {
   /** スクロール速度連動のskewを掛ける対象セレクタ（カンマ区切り） */
   skewTargets?: string;
+  /** 同一ルート内でコンテンツが差し替わる場合の再登録キー（例: /interview/:id の id） */
+  refreshKey?: string;
 };
 
 /**
@@ -14,7 +16,7 @@ type Options = {
  * トップページ（Home.tsx）と同じ演出言語（data-reveal / data-reveal-group /
  * .section__title / [data-giant] / [data-count] / .img-ph / .entry__char）を提供する。
  */
-export default function useSubpageAnimations({ skewTargets }: Options = {}) {
+export default function useSubpageAnimations({ skewTargets, refreshKey }: Options = {}) {
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
@@ -164,5 +166,5 @@ export default function useSubpageAnimations({ skewTargets }: Options = {}) {
     });
 
     return () => mm.revert();
-  }, [skewTargets]);
+  }, [skewTargets, refreshKey]);
 }
