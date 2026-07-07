@@ -8,7 +8,8 @@ import useSubpageAnimations from '../hooks/useSubpageAnimations';
 type WorkItem = {
   num: string;
   tag: string;
-  title: string;
+  /** 見出し（指定位置で改行するため行配列で持つ） */
+  titleLines: string[];
   challenge: string;
   support: string;
   result: string;
@@ -27,7 +28,7 @@ const WORKS: WorkItem[] = [
   {
     num: '01',
     tag: 'MANUFACTURING',
-    title: '老舗製造業のDXで生産性132%を実現',
+    titleLines: ['老舗製造業のDXで', '生産性132%を実現'],
     challenge:
       '紙の生産日報と熟練者の勘に頼った工程管理で、ボトルネックの特定に数週間かかっていた。',
     support:
@@ -40,7 +41,7 @@ const WORKS: WorkItem[] = [
   {
     num: '02',
     tag: 'RETAIL',
-    title: '全国120店舗の小売チェーンの購買体験を再設計',
+    titleLines: ['全国120店舗の', '小売チェーンの購買体験を', '再設計'],
     challenge: '店舗ごとに接客品質がばらつき、ECと店舗が分断されて機会損失が発生していた。',
     support:
       '顧客動線と購買データを分析し、店舗オペレーションを標準化。アプリと店舗をつなぐOMO体験を設計。',
@@ -52,7 +53,7 @@ const WORKS: WorkItem[] = [
   {
     num: '03',
     tag: 'STARTUP',
-    title: 'シリーズAスタートアップの新規事業を0→1で共創',
+    titleLines: ['SAスタートアップ', '新規事業を', '0→1で共創'],
     challenge: '主力事業の成長が鈍化し、第二の柱となる新規事業の種がなかった。',
     support:
       '機会探索ワークショップで事業仮説を創出。MVPを設計し、高速の仮説検証サイクルを共に回した。',
@@ -64,7 +65,7 @@ const WORKS: WorkItem[] = [
   {
     num: '04',
     tag: 'HEALTHCARE',
-    title: '地域医療グループの経営改革で増収+24%',
+    titleLines: ['地域医療グループの', '経営改革で増収+24%'],
     challenge: '診療科ごとの採算が不透明で、慢性的な人材不足が経営を圧迫していた。',
     support:
       '部門別採算を可視化し、患者体験を再設計。採用ブランディングと定着施策までを一体で支援。',
@@ -76,7 +77,7 @@ const WORKS: WorkItem[] = [
   {
     num: '05',
     tag: 'LOGISTICS',
-    title: '物流企業の配送網最適化でコスト23%削減',
+    titleLines: ['物流企業配送網最適化', 'コスト23%削減'],
     challenge: '燃料費の高騰とドライバー不足で、利益率が年々低下していた。',
     support:
       '配送データを分析して拠点とルートを再設計。需要予測モデルを導入し、積載率を最大化。',
@@ -100,7 +101,7 @@ export default function Works() {
       <section className="section svc-intro">
         <div className="container">
           <h2 className="section__title">
-            成果で語る、<span className="u-accent">発明の記録</span>。
+            成果で語る、<span className="u-accent">挑戦の記録</span>。
           </h2>
           <div className="svc-intro__body" data-reveal>
             <p>
@@ -132,7 +133,14 @@ export default function Works() {
                 </div>
                 <div className="svc__body">
                   <span className="works__tag">{w.tag}</span>
-                  <h2 className="section__title wrk__title">{w.title}</h2>
+                  <h2 className="section__title wrk__title">
+                    {w.titleLines.map((line, j) => (
+                      <span key={line} className="wrk__title-line">
+                        {line}
+                        {j < w.titleLines.length - 1 && <br />}
+                      </span>
+                    ))}
+                  </h2>
                   <dl className="wrk__rows">
                     <div className="wrk__row">
                       <dt>課題</dt>
