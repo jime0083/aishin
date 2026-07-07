@@ -41,7 +41,7 @@ const WORKS: WorkItem[] = [
   {
     num: '02',
     tag: 'RETAIL',
-    titleLines: ['全国120店舗の', '小売チェーンの購買体験を', '再設計'],
+    titleLines: ['全国120店舗の', '小売チェーンの', '購買体験を再設計'],
     challenge: '店舗ごとに接客品質がばらつき、ECと店舗が分断されて機会損失が発生していた。',
     support:
       '顧客動線と購買データを分析し、店舗オペレーションを標準化。アプリと店舗をつなぐOMO体験を設計。',
@@ -93,10 +93,7 @@ export default function Works() {
 
   return (
     <>
-      <PageHero
-        title="WORKS"
-        words={['IMPACT', 'RESULT', 'DX', '0→1', 'GROWTH', 'TRUST', '?']}
-      />
+      <PageHero title="WORKS" />
 
       <section className="section svc-intro">
         <div className="container">

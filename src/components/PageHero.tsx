@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import GiantWord from './GiantWord';
-import WordPiece from './WordPiece';
+import WordPiece, { WORD_PIECES } from './WordPiece';
 import usePhysicsPieces from '../hooks/usePhysicsPieces';
 
 type Props = {
@@ -11,11 +11,7 @@ type Props = {
   titleJa?: string;
   /** 導入文（任意） */
   lead?: string;
-  /** 物理演算で降らせる言葉のピース（任意） */
-  words?: string[];
 };
-
-const PIECE_VARIANTS = ['solid', 'outline', 'yellow', 'white'] as const;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,7 +22,7 @@ function prefersReducedMotion(): boolean {
  * 英語見出しの1文字ずつのドロップイン＋浮遊ループ、背景の巨大アウトライン英字、
  * 物理演算のパズルピース型ワード（ドラッグ可能）で構成する。
  */
-export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
+export default function PageHero({ title, titleJa, lead }: Props) {
   const rootRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const piecesRef = useRef<HTMLDivElement>(null);
@@ -96,23 +92,18 @@ export default function PageHero({ title, titleJa, lead, words = [] }: Props) {
     <section className="page-hero" ref={rootRef} aria-label={`${title} ページタイトル`}>
       <GiantWord text={title} side="right" />
 
-      {words.length > 0 && (
-        <div className="page-hero__stage" ref={stageRef} data-cursor-label="DRAG">
-          <div
-            className={`hero__pieces ${reduced ? 'hero__pieces--static' : ''}`}
-            ref={piecesRef}
-            aria-hidden="true"
-          >
-            {words.map((text, i) => (
-              <WordPiece
-                key={text}
-                text={text}
-                variant={text === '?' ? 'piece' : PIECE_VARIANTS[i % PIECE_VARIANTS.length]}
-              />
-            ))}
-          </div>
+      {/* 落下ピースはトップページと共通の WORD_PIECES を使用（P-020） */}
+      <div className="page-hero__stage" ref={stageRef} data-cursor-label="DRAG">
+        <div
+          className={`hero__pieces ${reduced ? 'hero__pieces--static' : ''}`}
+          ref={piecesRef}
+          aria-hidden="true"
+        >
+          {WORD_PIECES.map((p) => (
+            <WordPiece key={p.text} text={p.text} variant={p.variant} />
+          ))}
         </div>
-      )}
+      </div>
 
       <div className="container page-hero__content">
         <p className="page-hero__eyebrow">AISHIN INC. — RECRUIT SITE</p>

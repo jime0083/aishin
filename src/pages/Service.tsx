@@ -114,10 +114,7 @@ export default function Service() {
   return (
     <>
       {/* 日本語サブ・導入文はユーザー指示（P-012）により表示しない */}
-      <PageHero
-        title="SERVICE"
-        words={['STRATEGY', 'DX', 'NEW BIZ', 'DATA', 'LOGIC', 'CREATIVE', '?']}
-      />
+      <PageHero title="SERVICE" />
 
       <section className="section svc-intro">
         <div className="container">

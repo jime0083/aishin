@@ -4,22 +4,7 @@ import Matter from 'matter-js';
 import gsap from 'gsap';
 import LiquidBg from '../components/LiquidBg';
 import Marquee from '../components/Marquee';
-import WordPiece from '../components/WordPiece';
-
-/** 物理演算で降ってくる「言葉のピース」 */
-const WORD_PIECES: { text: string; variant: string }[] = [
-  { text: 'STRATEGY', variant: 'solid' },
-  { text: 'DX', variant: 'yellow' },
-  { text: 'PASSION', variant: 'outline' },
-  { text: 'LOGIC', variant: 'white' },
-  { text: 'CREATIVE', variant: 'solid' },
-  { text: 'TEAM', variant: 'outline' },
-  { text: 'GROWTH', variant: 'yellow' },
-  { text: 'IDEA', variant: 'white' },
-  { text: 'VISION', variant: 'outline' },
-  { text: 'CHALLENGE', variant: 'solid' },
-  { text: '?', variant: 'piece' },
-];
+import WordPiece, { WORD_PIECES } from '../components/WordPiece';
 
 const TITLE_LINES = ['まだ見ぬピースを', '発明する'];
 const ACCENT_CHARS = new Set(['ピ', 'ー', 'ス']);
