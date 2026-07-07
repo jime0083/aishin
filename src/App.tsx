@@ -11,6 +11,7 @@ import ComingSoon from './pages/ComingSoon';
 const Service = lazy(() => import('./pages/Service'));
 const Works = lazy(() => import('./pages/Works'));
 const InterviewDetail = lazy(() => import('./pages/InterviewDetail'));
+const Career = lazy(() => import('./pages/Career'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,7 +36,7 @@ export default function App() {
             <Route path="/works" element={<Works />} />
             {/* インタビューは一覧ページを持たず、トップから個別詳細ページへ遷移する仕様 */}
             <Route path="/interview/:id" element={<InterviewDetail />} />
-            <Route path="/career" element={<ComingSoon title="CAREER" jp="キャリアサポート" />} />
+            <Route path="/career" element={<Career />} />
             <Route path="/entry" element={<ComingSoon title="ENTRY" jp="採用エントリー" />} />
             <Route path="*" element={<ComingSoon title="NOT FOUND" jp="ページが見つかりません" />} />
           </Routes>
