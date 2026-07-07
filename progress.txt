@@ -77,42 +77,42 @@ problem.txt の P-008〜P-010 に対応するタスク一覧。
 実装順: SERVICE → WORKS → INTERVIEW詳細 → CAREER → ENTRY
 
 ■ ステップ1: SERVICEページ（共通基盤もここで実装）
-- [ ] T-27: ImagePlaceholder に曲線切り抜き対応を追加
+- [x] T-27: ImagePlaceholder に曲線切り抜き対応を追加
         対象: src/components/ImagePlaceholder.tsx / src/styles/global.css
         内容: props に shape?: 'blob1' | 'blob2' | 'arch' | 'pill' を追加し、
         .img-ph--blob1 等のクラスで clip-path / border-radius による有機的な曲線マスクを実装。
         shape 未指定の既存使用箇所は従来表示のまま（後方互換）
-- [ ] T-28: 下層ページ共通ヒーロー PageHero を新規作成
+- [x] T-28: 下層ページ共通ヒーロー PageHero を新規作成
         対象: src/components/PageHero.tsx（新規）/ src/styles/subpage.css（新規・main.tsxでimport）
         内容: props { title: string(英語見出し); titleJa: string; lead?: string }。
         英語見出しを1文字ずつキネティック出現（gsap, トップのFVと同様のドロップイン）、
         背景に巨大アウトライン英字、スクロールでパララックス。グリッドは .container 準拠
-- [ ] T-29: ルーティング変更
+- [x] T-29: ルーティング変更
         対象: src/App.tsx
         内容: /service を新ページに差し替え（React.lazy + Suspense でコード分割）。
         /interview ルートを削除し /interview/:id を追加（ページ本体はステップ3で実装するため
         暫定で ComingSoon を割当）。/works /career /entry は実装ステップまで ComingSoon のまま
-- [ ] T-30: ヘッダー・フッターから INTERVIEW リンクを削除
+- [x] T-30: ヘッダー・フッターから INTERVIEW リンクを削除
         対象: src/components/Header.tsx（NAV_ITEMS）/ src/components/Footer.tsx（FOOTER_LINKS）
-- [ ] T-31: SERVICEページのデータ定義とページ骨格を作成
+- [x] T-31: SERVICEページのデータ定義とページ骨格を作成
         対象: src/pages/Service.tsx（新規）
         内容: 現行 ServiceTeaser の3サービス（Strategy Consulting／DX Acceleration／
         New Business Design）を詳細化したデータを定義。各サービス =
         { num, title(EN), jp, lead, 課題リスト3点, 提供内容3点, 進め方4ステップ, imgId, imgLabel }。
         構成: PageHero → サービス3件（左右交互レイアウト・曲線切り抜き大画像 IMG-S01〜S03）
         → ENTRY への CTA
-- [ ] T-32: SERVICEページのスタイルとスクロール連動アニメーションを実装
+- [x] T-32: SERVICEページのスタイルとスクロール連動アニメーションを実装
         対象: src/styles/subpage.css / src/pages/Service.tsx
         内容: 左右交互の大画像レイアウト（画像は画面幅の~50%で大きく）、
         既存の data-reveal / data-reveal-group / GiantWord / マスクリビールを流用して
         スクロール連動演出を付与。グリッド整列（.container）を厳守
-- [ ] T-33: トップページから SERVICE セクションを削除
+- [x] T-33: トップページから SERVICE セクションを削除
         対象: src/pages/Home.tsx（ServiceTeaser の import と描画、velocity skew 対象
         '.service__cards' を削除）/ src/sections/ServiceTeaser.tsx（ファイル削除）
-- [ ] T-34: img.txt に SERVICE ページの必要画像（IMG-S01〜S03）を追記
+- [x] T-34: img.txt に SERVICE ページの必要画像（IMG-S01〜S03）を追記
         内容: 曲線切り抜き前提であること・被写体・推奨サイズを記載
-- [ ] T-35: 型チェック（npx tsc --noEmit）→ ビルド → デプロイ → progress.txt 更新
-        → ★作業停止・ユーザー確認待ち★
+- [x] T-35: 型チェック（npx tsc --noEmit）→ ビルド → デプロイ → progress.txt 更新
+        → ★作業停止・ユーザー確認待ち★（2026-07-07 デプロイ済み・本番200確認済み）
 
 ■ ステップ2: WORKSページ（ステップ1の全修正パス後に着手）
 - [ ] T-36: WORKSページのデータ定義とページ骨格を作成
