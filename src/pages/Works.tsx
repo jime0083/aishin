@@ -117,9 +117,6 @@ export default function Works() {
           <section key={w.num} className={`section wrk ${flip ? 'section--tinted' : ''}`}>
             <GiantWord text={w.tag} side={flip ? 'left' : 'right'} />
             <div className="container">
-              <p className="section__eyebrow" data-reveal>
-                <span className="section__eyebrow-num">{w.num}</span> CASE {w.num}
-              </p>
               {/* svc__grid（左右交互のメディア＋テキストグリッド）を共通レイアウトとして流用 */}
               <div className={`svc__grid ${flip ? 'svc__grid--flip' : ''}`}>
                 <div className="svc__media" data-reveal>

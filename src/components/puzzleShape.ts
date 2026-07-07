@@ -87,8 +87,35 @@ const VARIANT_EDGES: Edges[] = [
   { top: 'flat', right: 'notch', bottom: 'tab', left: 'tab' },
 ];
 
+/* 凹凸が占める領域の比率（文字の中央配置で本体領域を求めるのに使用）
+   タブ=本体を内側に寄せた張り出し分 / ノッチ=本体への食い込み深さ */
+const TAB_INSET_X = 0.15;
+const TAB_INSET_Y = 0.16;
+const NOTCH_INSET_X = 0.133;
+const NOTCH_INSET_Y = 0.144;
+
+function insetOf(edge: Edge, axis: 'x' | 'y'): number {
+  if (edge === 'tab') return axis === 'x' ? TAB_INSET_X : TAB_INSET_Y;
+  if (edge === 'notch') return axis === 'x' ? NOTCH_INSET_X : NOTCH_INSET_Y;
+  return 0;
+}
+
+export type PuzzleVariant = {
+  path: string;
+  /** 凹凸を差し引いた本体領域の4辺インセット（要素サイズに対する比率） */
+  inset: { top: number; right: number; bottom: number; left: number };
+};
+
 /** 落下ワード用の形状バリエーション（マウント時にランダム選択） */
-export const PUZZLE_VARIANTS: string[] = VARIANT_EDGES.map((edges) => buildPuzzlePath(edges));
+export const PUZZLE_VARIANTS: PuzzleVariant[] = VARIANT_EDGES.map((edges) => ({
+  path: buildPuzzlePath(edges),
+  inset: {
+    top: insetOf(edges.top, 'y'),
+    right: insetOf(edges.right, 'x'),
+    bottom: insetOf(edges.bottom, 'y'),
+    left: insetOf(edges.left, 'x'),
+  },
+}));
 
 /**
  * PUZZLE_PATH の左右反転版（凸タブが左辺に来る形状）。
