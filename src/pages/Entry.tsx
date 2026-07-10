@@ -7,7 +7,7 @@ import useSubpageAnimations from '../hooks/useSubpageAnimations';
 /**
  * ENTRYページ（/entry）。
  * 内容のトレース元: mirai-kirei.jp/contact/（フッターはトレースしない）
- * 選択肢等は採用向けに置換。送信はダミー動作（実送信なし・完了画面表示のみ。
+ * 選択肢等は採用向けに置換。送信はダミー動作（実送信なし・「送信できません」の案内画面を表示。
  * 後日バックエンドや外部フォームサービスに接続できるよう handleSubmit に集約）
  */
 
@@ -111,15 +111,15 @@ export default function Entry() {
         <GiantWord text="JOIN US" side="right" />
         <div className="container">
           {done ? (
-            /* 送信完了画面（ダミー送信） */
+            /* 送信後画面（ポートフォリオサイトのため実送信は行わない: P-026） */
             <div className="ent__done" data-reveal>
-              <p className="section__eyebrow">THANK YOU</p>
+              <p className="section__eyebrow">NOTICE</p>
               <h2 className="section__title">
-                エントリーを<span className="u-accent">受け付けました</span>。
+                このポートフォリオサイトからは<span className="u-accent">送信できません</span>。
               </h2>
               <p className="ent__done-body">
-                ご応募ありがとうございます。内容を確認のうえ、担当者よりご連絡差し上げます。
-                いつの日か、あなたというピースと一緒に働けることを楽しみにしています。
+                当サイトはポートフォリオとして制作したデモサイトのため、
+                ご入力いただいたエントリー内容はどこにも送信されません。ご了承ください。
               </p>
               <Link to="/" className="btn-line">
                 ← BACK TO TOP
