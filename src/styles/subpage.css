@@ -212,11 +212,14 @@
   margin-top: 0.8rem;
 }
 
-/* 進め方ステップ */
+/* 進め方ステップ（ol標準の連番マーカーは表示しない: P-025） */
 .svc__steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(0.8rem, 1.6vw, 1.2rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .svc__step {
