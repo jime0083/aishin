@@ -16,9 +16,12 @@ export default function Footer() {
       <div className="container">
         <div className="footer__top">
           <div>
-            <Link to="/" className="footer__logo">
-              {/* [IMG-LOGO] ロゴ画像に差し替え予定 */}
-              AISHIN
+            <Link to="/" className="footer__logo" aria-label="株式会社アイシン">
+              <img
+                src={`${import.meta.env.BASE_URL}images/logo.png`}
+                alt="株式会社アイシン"
+                className="footer__logo-img"
+              />
             </Link>
             <p className="footer__tagline">まだ見ぬピースを発明する</p>
           </div>
