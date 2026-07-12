@@ -23,7 +23,6 @@ export default function Footer() {
                 className="footer__logo-img"
               />
             </Link>
-            <p className="footer__tagline">まだ見ぬピースを発明する</p>
           </div>
           <nav className="footer__nav" aria-label="フッターナビゲーション">
             {FOOTER_LINKS.map((item) => (

@@ -872,15 +872,9 @@ main,
 /* ロゴ画像は白背景のため multiply で紙色背景になじませる */
 .footer__logo-img {
   display: block;
-  height: 64px;
+  height: 96px;
   width: auto;
   mix-blend-mode: multiply;
-}
-
-.footer__tagline {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  margin-top: 0.5rem;
 }
 
 .footer__nav {
