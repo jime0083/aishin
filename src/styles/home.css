@@ -562,16 +562,6 @@
   pointer-events: none;
 }
 
-.entry__bg-note {
-  position: absolute;
-  right: 1.2rem;
-  bottom: 0.9rem;
-  font-family: var(--font-en);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.6);
-}
-
 .entry__inner {
   position: relative;
 }

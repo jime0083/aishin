@@ -1,4 +1,5 @@
 import { PUZZLE_PATH, PUZZLE_PATH_LEFT } from './puzzleShape';
+import { IMAGE_SOURCES } from '../data/images';
 
 type Props = {
   id: string;
@@ -7,15 +8,28 @@ type Props = {
   ratio?: string;
   /** 切り抜き形状（未指定なら従来の角丸矩形）。puzzle-left は凸タブが左・右端フラット */
   shape?: 'puzzle' | 'puzzle-left' | 'ellipse' | 'blob1' | 'blob2' | 'arch' | 'pill';
+  /** 明示的に画像URLを指定する場合（未指定なら id から IMAGE_SOURCES を参照） */
+  src?: string;
   className?: string;
 };
 
 /**
- * 画像差し込み予定地のフレーム。
- * img.txt の一覧と同じ ID を表示し、後から実画像に置き換える。
+ * 画像フレーム。
+ * IMAGE_SOURCES に ID が登録されていれば実画像を、なければ枠（プレースホルダー）を表示する。
  */
-export default function ImagePlaceholder({ id, label, ratio = '4 / 3', shape, className }: Props) {
-  const inner = (
+export default function ImagePlaceholder({
+  id,
+  label,
+  ratio = '4 / 3',
+  shape,
+  src,
+  className,
+}: Props) {
+  const resolvedSrc = src ?? IMAGE_SOURCES[id];
+
+  const inner = resolvedSrc ? (
+    <img className="img-ph__img" src={resolvedSrc} alt={label} loading="lazy" decoding="async" />
+  ) : (
     <>
       <svg className="img-ph__cross" aria-hidden="true">
         <line x1="0" y1="0" x2="100%" y2="100%" />

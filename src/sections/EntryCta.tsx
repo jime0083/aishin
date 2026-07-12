@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 export default function EntryCta() {
   return (
     <section className="entry" id="entry">
-      {/* [IMG-13] チームの躍動感ある写真を背景に敷く予定（オレンジのオーバーレイあり） */}
-      <div className="entry__bg" aria-hidden="true">
-        <span className="entry__bg-note">IMG-13（背景写真エリア）</span>
-      </div>
+      {/* 装飾用の点線枠のみ（背景写真は配置しない方針: P-030） */}
+      <div className="entry__bg" aria-hidden="true" />
       <div className="container entry__inner" data-reveal>
         <p className="entry__eyebrow">JOIN US</p>
         <h2 className="entry__title" aria-label="ENTRY">

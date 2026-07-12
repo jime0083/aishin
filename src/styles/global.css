@@ -390,6 +390,21 @@ main,
   color: #9a8d78;
 }
 
+/* 実画像を表示するとき: 枠いっぱいにcoverで敷き、点線枠・背景は消す */
+.img-ph__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.img-ph:has(.img-ph__img) {
+  border: none;
+  background: none;
+}
+
 .img-ph__cross {
   position: absolute;
   inset: 0;

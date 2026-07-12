@@ -2,3 +2,6 @@ node_modules/
 dist/
 .DS_Store
 *.local
+
+# 画像の原本（大容量PNG）。Web表示用の軽量版は public/images/opt/ に生成してコミットする
+source-images/
