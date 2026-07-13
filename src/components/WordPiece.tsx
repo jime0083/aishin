@@ -11,16 +11,16 @@ type Props = {
  * トップのHeroと下層のPageHeroはこの定数を使い、内容を統一する。
  */
 export const WORD_PIECES: { text: string; variant: string }[] = [
-  { text: 'STRATEGY', variant: 'solid' },
+  { text: 'MISSION', variant: 'solid' },
   { text: 'DX', variant: 'yellow' },
   { text: 'PASSION', variant: 'outline' },
   { text: 'LOGIC', variant: 'white' },
-  { text: 'CREATIVE', variant: 'solid' },
+  { text: 'INSIGHT', variant: 'solid' },
   { text: 'TEAM', variant: 'outline' },
   { text: 'GROWTH', variant: 'yellow' },
   { text: 'IDEA', variant: 'white' },
   { text: 'VISION', variant: 'outline' },
-  { text: 'CHALLENGE', variant: 'solid' },
+  { text: 'CHANGE', variant: 'solid' },
   { text: '?', variant: 'piece' },
 ];
 
