@@ -169,7 +169,6 @@ export default function InterviewDetail() {
                       id={qa.photo.imgId}
                       label={qa.photo.imgLabel}
                       ratio="4 / 3"
-                      shape={flip ? 'puzzle-left' : 'puzzle'}
                     />
                   </div>
                 )}

@@ -124,7 +124,6 @@ export default function Career() {
                 id="IMG-C01"
                 label="キャリア面談・1on1の風景"
                 ratio="4 / 3"
-                shape="puzzle"
               />
             </div>
             <div className="svc__body">
@@ -151,7 +150,7 @@ export default function Career() {
         </div>
       </section>
 
-      {/* 03・04（画像右・左向きピースで右ライン揃え） */}
+      {/* 03・04（画像右） */}
       <section className="section crr section--tinted">
         <GiantWord text="GROWTH" side="left" />
         <div className="container">
@@ -161,7 +160,6 @@ export default function Career() {
                 id="IMG-C02"
                 label="研修・勉強会の風景"
                 ratio="4 / 3"
-                shape="puzzle-left"
               />
             </div>
             <div className="svc__body">

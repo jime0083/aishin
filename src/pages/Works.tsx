@@ -125,7 +125,6 @@ export default function Works() {
                     id={w.imgId}
                     label={w.imgLabel}
                     ratio="4 / 3"
-                    shape={flip ? 'puzzle-left' : 'puzzle'}
                   />
                 </div>
                 <div className="svc__body">
