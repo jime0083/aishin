@@ -8,6 +8,19 @@ const base = import.meta.env.BASE_URL;
 const img = (file: string) => `${base}images/opt/${file}`;
 
 export const IMAGE_SOURCES: Record<string, string> = {
+  // トップ ABOUT（若さは武器だ）
+  'IMG-01': img('IMG-01.jpg'),
+  'IMG-02': img('IMG-02.jpg'),
+  // トップ CAREER ティーザー
+  'IMG-12': img('IMG-12.jpg'),
+  // SERVICE 01 戦略コンサル / 02 DX支援
+  'IMG-S01': img('IMG-S01.jpg'),
+  'IMG-S02': img('IMG-S02.jpg'),
+  // WORKS 01 製造 / 03 ベンチャー / 04 医療 / 05 物流（02 小売は IMG-W02）
+  'IMG-W01': img('IMG-W01.jpg'),
+  'IMG-W03': img('IMG-W03.jpg'),
+  'IMG-W04': img('IMG-W04.jpg'),
+  'IMG-W05': img('IMG-W05.jpg'),
   // 社員ポートレート（トップINTERVIEW・詳細ページ共通）
   'IMG-09': img('IMG-09.jpg'),
   'IMG-10': img('IMG-10.jpg'),

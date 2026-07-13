@@ -2,24 +2,25 @@ import { Link } from 'react-router-dom';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import GiantWord from '../components/GiantWord';
 
+// 画像は WORKS ページ（IMG-W01〜W03）と連動させて同じ実績・同じ画像を使う
 const WORKS = [
   {
     tag: 'MANUFACTURING',
     title: '老舗製造業のDXで生産性132%を実現',
-    imgId: 'IMG-06',
-    imgLabel: '製造業クライアント事例イメージ',
+    imgId: 'IMG-W01',
+    imgLabel: '製造業の工場・生産ラインの風景',
   },
   {
     tag: 'RETAIL',
     title: '全国120店舗の小売チェーンの購買体験を再設計',
-    imgId: 'IMG-07',
-    imgLabel: '小売クライアント事例イメージ',
+    imgId: 'IMG-W02',
+    imgLabel: '小売店舗・売場の風景',
   },
   {
     tag: 'STARTUP',
     title: 'シリーズAスタートアップの新規事業を0→1で共創',
-    imgId: 'IMG-08',
-    imgLabel: 'スタートアップ事例イメージ',
+    imgId: 'IMG-W03',
+    imgLabel: 'スタートアップのオフィス・開発風景',
   },
 ];
 
@@ -36,7 +37,7 @@ export default function WorksTeaser() {
             成果で語る。<span className="u-accent">実績</span>の一部。
           </h2>
           <Link to="/works" className="btn-line">
-            VIEW ALL WORKS <span className="btn-line__arrow">→</span>
+            VIEW MORE WORKS <span className="btn-line__arrow">→</span>
           </Link>
         </div>
         <div className="works__cards" data-reveal-group>
