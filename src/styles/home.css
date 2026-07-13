@@ -623,9 +623,29 @@
    Responsive
 ============================================ */
 @media (max-width: 900px) {
-  .about__grid,
   .career__grid {
     grid-template-columns: 1fr;
+  }
+
+  /* About: 画像2つを Mission と About us の間（セクション先頭）へ移動（P-042）。
+     デスクトップの2カラムは維持したまま、モバイルのみ container を縦フレックス化し、
+     grid を display:contents で解体して画像に order:-1 を付与する */
+  .about .container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .about .container > .section__eyebrow {
+    margin-bottom: 0;
+  }
+
+  .about__grid {
+    display: contents;
+  }
+
+  .about__images {
+    order: -1;
   }
 
   .works__cards,
