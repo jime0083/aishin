@@ -74,14 +74,14 @@
   stroke-width: 0;
 }
 
-/* テキストは正方形いっぱいに広げて上下左右中央 */
+/* テキストは凹凸を除いたピース胴体（PUZZLE_PATH）の内側で上下左右中央 */
 .hero__piece-text {
   position: absolute;
-  inset: 0;
+  inset: 16% 15% 6.67% 5%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 4px;
   line-height: 1.2;
   text-align: center;
 }

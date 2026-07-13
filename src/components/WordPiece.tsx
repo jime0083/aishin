@@ -1,3 +1,5 @@
+import { PUZZLE_PATH } from './puzzleShape';
+
 type Props = {
   text: string;
   /** 配色バリエーション: solid | outline | yellow | white | piece */
@@ -23,20 +25,11 @@ export const WORD_PIECES: { text: string; variant: string }[] = [
 ];
 
 /**
- * 角丸正方形パス（0..1正規化）。要素側を正方形サイズに固定するため、
- * viewBox="0 0 1 1" + preserveAspectRatio="none" でも角は円形に描画される（P-038）。
- */
-const SQUARE_PATH =
-  'M 0.08 0 H 0.92 A 0.08 0.08 0 0 1 1 0.08 ' +
-  'V 0.92 A 0.08 0.08 0 0 1 0.92 1 ' +
-  'H 0.08 A 0.08 0.08 0 0 1 0 0.92 ' +
-  'V 0.08 A 0.08 0.08 0 0 1 0.08 0 Z';
-
-/**
  * 物理演算で落下・ドラッグされる「言葉のピース」。
- * 形状は全ピース共通の角丸正方形で、サイズもCSSで一律に固定する（P-038）。
- * サイズはDOMの offsetWidth/Height を物理エンジンが読むため、CSSの正方形が
- * そのまま剛体サイズになる。トップのHeroと下層のPageHeroで共通使用する。
+ * 形状は全ピース共通のジグソーピース（PUZZLE_PATH）で、外枠は正方形比率・
+ * 同一サイズにCSSで固定する（P-039）。凹凸を残しつつ「正方形に近いパズルピース」
+ * に見せる。サイズはDOMの offsetWidth/Height を物理エンジンが読むため、CSSの
+ * 正方形枠がそのまま剛体サイズになる。トップのHeroと下層のPageHeroで共通使用する。
  */
 export default function WordPiece({ text, variant }: Props) {
   return (
@@ -48,7 +41,7 @@ export default function WordPiece({ text, variant }: Props) {
         aria-hidden="true"
         focusable="false"
       >
-        <path d={SQUARE_PATH} vectorEffect="non-scaling-stroke" />
+        <path d={PUZZLE_PATH} vectorEffect="non-scaling-stroke" />
       </svg>
       <span className="hero__piece-text">{text}</span>
     </div>
