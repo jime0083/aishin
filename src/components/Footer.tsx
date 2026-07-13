@@ -18,7 +18,7 @@ export default function Footer() {
           <div>
             <Link to="/" className="footer__logo" aria-label="株式会社アイシン">
               <img
-                src={`${import.meta.env.BASE_URL}images/logo.png`}
+                src={`${import.meta.env.BASE_URL}images/logo-footer.png`}
                 alt="株式会社アイシン"
                 className="footer__logo-img"
               />

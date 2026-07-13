@@ -869,10 +869,12 @@ main,
   letter-spacing: 0.06em;
 }
 
-/* ロゴ画像は白背景のため multiply で紙色背景になじませる */
+/* ロゴ画像は白背景のため multiply で紙色背景になじませる。
+   余白除去版（logo-footer.png）を使い、絵柄の左端をコンテナ左端＝
+   コピーライトのグリッドに揃える。高さは従来の絵柄実寸を維持（旧96px枠内の絵柄相当） */
 .footer__logo-img {
   display: block;
-  height: 96px;
+  height: 73px;
   width: auto;
   mix-blend-mode: multiply;
 }
