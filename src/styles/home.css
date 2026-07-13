@@ -623,28 +623,29 @@
    Responsive
 ============================================ */
 @media (max-width: 900px) {
-  .career__grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* About: 画像2つを Mission と About us の間（セクション先頭）へ移動（P-042）。
-     デスクトップの2カラムは維持したまま、モバイルのみ container を縦フレックス化し、
-     grid を display:contents で解体して画像に order:-1 を付与する */
-  .about .container {
+  /* About/Career: セクション下部の画像を、直前セクションとの間（セクション先頭）へ
+     移動する（P-042 / P-043）。デスクトップの2カラムは維持したまま、モバイルのみ
+     container を縦フレックス化し、grid を display:contents で解体して画像に
+     order:-1 を付与する */
+  .about .container,
+  .career .container {
     display: flex;
     flex-direction: column;
     gap: clamp(2.5rem, 8vw, 4rem);
   }
 
-  .about .container > .section__eyebrow {
+  .about .container > .section__eyebrow,
+  .career .container > .section__eyebrow {
     margin-bottom: 0;
   }
 
-  .about__grid {
+  .about__grid,
+  .career__grid {
     display: contents;
   }
 
-  .about__images {
+  .about__images,
+  .career__image {
     order: -1;
   }
 
