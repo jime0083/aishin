@@ -105,8 +105,8 @@ export const INTERVIEWS: Interview[] = [
   },
   {
     id: '03',
-    name: '山本 彩',
-    nameEn: 'Aya Yamamoto',
+    name: '山本 夏紀',
+    nameEn: 'Natsuki Yamamoto',
     joinYear: '2018年',
     position: 'Manager（中途入社）',
     quote: '29歳でマネージャーに。年齢ではなく挑戦で評価される会社',

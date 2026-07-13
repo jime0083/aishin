@@ -21,7 +21,7 @@ const MEMBERS = [
   },
   {
     id: '03',
-    name: '山本 彩',
+    name: '山本 夏紀',
     role: 'Manager / 2018年中途入社',
     quote: '29歳でマネージャーに。年齢ではなく挑戦で評価される会社',
     imgId: 'IMG-11',
