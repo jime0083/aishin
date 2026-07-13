@@ -43,17 +43,19 @@
   inset: 0;
 }
 
-/* パズルのピース型ワード（SVG背景＋テキスト。会社テーマに合わせた形状）
-   サイズは WordPiece が文字サイズ＋余白20pxから動的に算出して width/height を設定する */
+/* 落下ワードのピース（SVG角丸正方形＋テキスト）。
+   形状は全ピース共通の正方形、サイズも一律に固定する（P-038） */
 .hero__piece {
   position: absolute;
   top: 0;
   left: 0;
+  width: clamp(96px, 11vw, 124px);
+  aspect-ratio: 1 / 1;
   transform: translate(-200vw, -200vh);
   font-family: var(--font-en);
   font-weight: 700;
-  font-size: clamp(0.85rem, 1.6vw, 1.15rem);
-  letter-spacing: 0.08em;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+  letter-spacing: 0.06em;
   white-space: nowrap;
   will-change: transform;
   user-select: none;
@@ -65,23 +67,23 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: visible; /* 角丸の縁でアウトラインのストロークが欠けないように */
 }
 
 .hero__piece-svg path {
   stroke-width: 0;
 }
 
-/* 凹凸を除いた本体領域（インセットはインラインstyleで指定）の中で上下左右中央 */
+/* テキストは正方形いっぱいに広げて上下左右中央 */
 .hero__piece-text {
   position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.hero__piece-text-inner {
-  display: inline-block;
+  padding: 0 8px;
   line-height: 1.2;
+  text-align: center;
 }
 
 .hero__piece--solid {
